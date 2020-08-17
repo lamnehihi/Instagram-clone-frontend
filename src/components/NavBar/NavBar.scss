@@ -1,0 +1,22 @@
+#navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+#avatar {
+  margin-top: .15rem;
+}
+
+.navbar{
+  &__menu {
+    > a {
+      color: #000;
+      height: 22px !important;
+      margin: 0rem .5rem;
+      
+      > svg {
+        font-size: 30px;
+      }
+    }
+  }
+}
