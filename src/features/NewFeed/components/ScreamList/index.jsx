@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-Post.propTypes = {
+ScreamList.propTypes = {
   
 };
 
-function Post(props) {
+function ScreamList(props) {
   return (
     <div>
-      Single post
+      
     </div>
   );
 }
 
-export default Post;
+export default ScreamList;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Main from './pages/Main';
-import Post from './pages/Post';
+import Scream from './pages/Scream';
 
 NewFeed.propTypes = {
   
@@ -18,7 +18,7 @@ function NewFeed(props) {
         <Route
           exact
           path={`${match.url}/:postId`}
-          component={Post}
+          component={Scream}
         ></Route>
 
       </Switch>
