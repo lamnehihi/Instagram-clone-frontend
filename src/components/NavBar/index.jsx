@@ -41,7 +41,7 @@ function NavBar(props) {
 
   return (
     <div>
-      <AppBar elevation={0} className="navbar" id="navbar" position="fixed" >
+      <AppBar elevation={5} className="navbar" id="navbar" position="fixed" >
         <Toolbar>
           <Grid
             container

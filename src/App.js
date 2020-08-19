@@ -3,9 +3,8 @@ import './App.css';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import NavBar from 'components/NavBar';
 import NewFeed from 'features/NewFeed';
-import Signup from 'features/Auth/pages/Signup';
-import Login from 'features/Auth/pages/Login';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
+import Auth from 'features/Auth';
 
 const theme = createMuiTheme({
   palette: {
@@ -23,7 +22,8 @@ const theme = createMuiTheme({
     },
     hover: {
       main: '#262626',
-    }
+      
+    },
   },
 })
 
@@ -34,12 +34,11 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
 
       <BrowserRouter>
-        <NavBar />
         <div className="container">
           <Switch>
             <Route exact path='/' component={NewFeed}></Route>
-            <Route path='/signup' component={Signup}></Route>
-            <Route path='/login' component={Login}></Route>
+            <Route path='/signup' component={Auth}></Route>
+            <Route path='/login' component={Auth}></Route>
           </Switch>
         </div>
         </BrowserRouter>

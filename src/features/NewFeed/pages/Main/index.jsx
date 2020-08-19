@@ -1,40 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Box, Grid, Hidden } from '@material-ui/core';
-import screamApi from 'api/screamApi';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { Grid  } from "@material-ui/core";
+import screamApi from "api/screamApi";
+import SubNewFeed from "features/NewFeed/components/SubNewFeed";
+import ScreamList from "features/NewFeed/components/ScreamList";
+import { useSelector, useDispatch } from "react-redux";
+import { fletch } from "features/NewFeed/NewFeedSlice";
 
-Main.propTypes = {
-  
-};
+Main.propTypes = {};
+
 
 function Main(props) {
-  const [scream, setScream] = useState([]);
+  const screams = useSelector((state) => state.newFeed);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     const fletchAllScream = async () => {
       try {
         const response = await screamApi.getAll();
-        console.log("response:", response);
-        setScream(response);
-        console.log("scream:", scream);
-
+        const action = fletch(response);
+        dispatch(action);
       } catch (error) {
         console.log("fail to get screams");
       }
-    }
+    };
 
     fletchAllScream();
-  }, [])
+  }, []);
+
   return (
     <Grid container spacing={10}>
-      <Grid item xs={12} lg={8} >
-        post
-      </Grid>
-      <Hidden mdDown>
-        <Grid item lg={4}>
-          ad
-        </Grid>
-      </Hidden>
+      <ScreamList screams={screams} />
+      <SubNewFeed />
     </Grid>
   );
 }
