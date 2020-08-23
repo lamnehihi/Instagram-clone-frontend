@@ -8,17 +8,13 @@ const newFeed = createSlice({
   name: "newFeed",
   initialState: initialScreams,
   reducers: {
-    fletch: (state, action) => {
+    FLETCH: (state, action) => {
       console.log("action", action.payload);
       return state = [...action.payload];
     },
-    like: (state, action) => {
-      
-    }
-
   }
 })
 
 const {reducer, actions} = newFeed;
-export const { fletch } = actions;
+export const { FLETCH } = actions;
 export default reducer;

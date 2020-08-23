@@ -5,7 +5,7 @@ import screamApi from "api/screamApi";
 import SubNewFeed from "features/NewFeed/components/SubNewFeed";
 import ScreamList from "features/NewFeed/components/ScreamList";
 import { useSelector, useDispatch } from "react-redux";
-import { fletch } from "features/NewFeed/NewFeedSlice";
+import { FLETCH } from "features/NewFeed/NewFeedSlice";
 
 Main.propTypes = {};
 
@@ -19,7 +19,7 @@ function Main(props) {
     const fletchAllScream = async () => {
       try {
         const response = await screamApi.getAll();
-        const action = fletch(response);
+        const action = FLETCH(response);
         dispatch(action);
       } catch (error) {
         console.log("fail to get screams");

@@ -1,10 +1,13 @@
 import React, { Suspense } from 'react';
 import './App.css';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import NavBar from 'components/NavBar';
+import { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
 import NewFeed from 'features/NewFeed';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Auth from 'features/Auth';
+import JwtDecode from 'jwt-decode';
+import { useSelector, useDispatch } from 'react-redux';
+import { SET_LOGOUT, SET_LOGIN, SET_AUTHENTICATED_LOGIN } from 'features/Auth/UserSlice';
+import Axios from 'axios';
 
 const theme = createMuiTheme({
   palette: {
@@ -27,7 +30,25 @@ const theme = createMuiTheme({
   },
 })
 
+
+
 function App() {
+  const token = localStorage.getItem("FBIdToken");
+  let decodedToken;
+  const dispatch = useDispatch();
+  
+  if (token) {
+    console.log("check token");
+    console.log(token.split(' ')[1]);
+    decodedToken = JwtDecode(token.split(' ')[1]);
+    if (decodedToken.exp *1000 < Date.now()) {
+      window.location.href = "/login";
+      dispatch(SET_LOGOUT());
+    } else {
+      Axios.defaults.headers.common['Authorization'] = token;
+      dispatch(SET_LOGIN());
+    }
+  }
   return (
     <div className="social-app">
     <ThemeProvider theme={theme}>
