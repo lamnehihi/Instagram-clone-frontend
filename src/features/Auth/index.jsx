@@ -5,23 +5,12 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import JwtDecode from "jwt-decode";
 import AuthRoute from "components/AuthRoute";
+import { useSelector } from "react-redux";
 
-Auth.propTypes = {};
-
-const token = localStorage.getItem("FBIdToken");
-let decodedToken;
-
-if (token) {
-  decodedToken = JwtDecode(token);
-  if (decodedToken.exp * 1000 < Date.now()) {
-    window.location.href = "/login";
-  } else {
-  }
-}
+Auth.propTypes = {
+};
 
 function Auth(props) {
-  console.log("auth mount");
-
   return (
     <Switch>
       <AuthRoute
