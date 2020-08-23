@@ -9,7 +9,7 @@ NewFeed.propTypes = {};
 
 function NewFeed(props) {
   const match = useRouteMatch();
-
+  console.log("newfeed mount");
   return (
     <BrowserRouter>
       <NavBar />

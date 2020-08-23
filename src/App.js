@@ -5,6 +5,7 @@ import NavBar from 'components/NavBar';
 import NewFeed from 'features/NewFeed';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Auth from 'features/Auth';
+import JwtDecode from 'jwt-decode';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,6 +27,8 @@ const theme = createMuiTheme({
     },
   },
 })
+
+
 
 function App() {
   return (
