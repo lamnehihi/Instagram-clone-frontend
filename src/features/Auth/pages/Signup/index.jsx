@@ -13,11 +13,9 @@ import {
   Paper,
 } from "@material-ui/core";
 import appIcon from "assets/images/logo.png";
-import authApi from "api/authApi";
-import Axios from "axios";
 import { useHistory } from "react-router-dom";
 import styleSignup from "utils/styleSignup";
-import { SET_AUTHENTICATED } from "features/Auth/UserSlice";
+import { SET_AUTHENTICATED_SIGNUP } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const style = styleSignup;
@@ -39,7 +37,7 @@ function Signup(props) {
     event.preventDefault();
     console.log("submit signup");
 
-    const action = SET_AUTHENTICATED({user, history});
+    const action = SET_AUTHENTICATED_SIGNUP({user, history});
     dispatch(action);
   };
 

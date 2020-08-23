@@ -16,7 +16,7 @@ import {
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
 import styleLogin from "utils/styleLogin";
-import { SET_AUTHENTICATED } from "features/Auth/UserSlice";
+import { SET_AUTHENTICATED_LOGIN } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const style = styleLogin;
@@ -37,7 +37,7 @@ function Login(props) {
     event.preventDefault();
     console.log("submit login");
 
-    const action = SET_AUTHENTICATED({user, history});
+    const action = SET_AUTHENTICATED_LOGIN({user, history});
     dispatch(action);
   };
 

@@ -11,16 +11,35 @@ const initialState = {
   notifications: [],
 };
 
-export const SET_AUTHENTICATED = createAsyncThunk('users/fetchByIdStatus',
+export const SET_AUTHENTICATED_LOGIN = createAsyncThunk('users/fetchByIdStatus',
 async (action, thunkApi) => {
-  console.log("action", action);
   const userData = action.user;
   const dispatch = thunkApi.dispatch;
   dispatch(LOADING_UI());
 
-  console.log("userData", userData);
   try {
     const res = await Axios.post("auth/login", userData);
+    const FBToken = `Bearer ${res.data.token}`;
+    localStorage.setItem("FBIdToken", FBToken);
+    Axios.defaults.headers.common["Authorization"] = FBToken;
+  } catch (error) {
+    console.log("error", error.response.data);
+    dispatch(SET_ERRORS(error.response.data));
+  }
+  const res = await Axios.get("/user");
+  dispatch(SET_USER(res.data));
+  const history = action.history;
+  history.push('/');
+})
+
+export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk('users/fetchByIdStatus',
+async (action, thunkApi) => {
+  const userData = action.user;
+  const dispatch = thunkApi.dispatch;
+  dispatch(LOADING_UI());
+
+  try {
+    const res = await Axios.post("auth/signup", userData);
     const FBToken = `Bearer ${res.data.token}`;
     localStorage.setItem("FBIdToken", FBToken);
     Axios.defaults.headers.common["Authorization"] = FBToken;
@@ -49,7 +68,7 @@ const user = createSlice({
     }
   },
   extraReducers: {
-    [SET_AUTHENTICATED.fulfilled]: (state, action) => {
+    [SET_AUTHENTICATED_LOGIN.fulfilled]: (state, action) => {
       state.authenticated = true;
     }
   }
