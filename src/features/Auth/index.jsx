@@ -12,6 +12,7 @@ Auth.propTypes = {
 
 function Auth(props) {
   return (
+    
     <Switch>
       <AuthRoute
         exact

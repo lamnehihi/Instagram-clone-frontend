@@ -11,7 +11,7 @@ function NewFeed(props) {
   const match = useRouteMatch();
   console.log("newfeed mount");
   return (
-    <BrowserRouter>
+    <div>
       <NavBar />
 
       <Switch>
@@ -19,7 +19,7 @@ function NewFeed(props) {
 
         <Route exact path={`${match.url}/:postId`} component={Scream}></Route>
       </Switch>
-    </BrowserRouter>
+    </div>
   );
 }
 

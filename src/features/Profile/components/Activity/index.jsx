@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-About.propTypes = {
+Activity.propTypes = {
   
 };
 
-function About(props) {
+function Activity(props) {
   return (
     <div>
-      About profile
+      
     </div>
   );
 }
 
-export default About;
+export default Activity;

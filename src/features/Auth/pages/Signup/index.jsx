@@ -49,6 +49,7 @@ function Signup(props) {
   };
 
   const userSignUp = useSelector((state) => state.user);
+  console.log("sign up");
 
   return (
     <div>
