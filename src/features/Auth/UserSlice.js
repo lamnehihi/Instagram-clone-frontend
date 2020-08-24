@@ -9,6 +9,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
+  screams: [],
 };
 
 export const setAuthorizationHeader = (token) => {

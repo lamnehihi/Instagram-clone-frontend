@@ -59,7 +59,7 @@ function App() {
         <div className="container">
           <Switch>
             <Route exact path='/' component={NewFeed}></Route>
-            <Route exact path='/profile' component={Profile}></Route>
+            <Route path='/profile' component={Profile}></Route>
             <Route path='/signup' component={Auth}></Route>
             <Route path='/login' component={Auth}></Route>
           </Switch>

@@ -53,7 +53,6 @@ function Login(props) {
   return (
     <div>
     <Grid container className={classes.root}>
-      <Grid item sm />
       <Grid item sm>
         <Paper item sm className={classes.box} elevation={15}>
           <img
@@ -145,7 +144,6 @@ function Login(props) {
           </Link>
         </Paper>
       </Grid>
-      <Grid item sm />
     </Grid>
     <footer className={classes.footer}>
     <Typography>

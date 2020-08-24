@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
+import { useHistory } from "react-router-dom";
 
 Bio.propTypes = {
   user: PropTypes.object.isRequired,
@@ -107,6 +108,10 @@ const useStyle = makeStyles((theme) => ({
 function Bio(props) {
   const { user } = props;
   const classes = useStyle();
+  const history = useHistory();
+  const handleOnClick = () => {
+    history.push('/profile/edit');
+  }
   return (
     <Box className={classes.root} position="relative">
       <Grid xs={4} className="avatar">
@@ -127,7 +132,7 @@ function Bio(props) {
         >
           <Typography variant="h2">{user.handle}</Typography>
           <Grid xs={12} md={3}>
-            <Button variant="outlined">Edit Profile</Button>
+            <Button variant="outlined" onClick={handleOnClick}>Edit Profile</Button>
           </Grid>
           <IconButton>
             <SettingsOutlinedIcon />
