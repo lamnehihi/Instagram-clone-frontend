@@ -8,6 +8,7 @@ import JwtDecode from 'jwt-decode';
 import { useSelector, useDispatch } from 'react-redux';
 import { SET_LOGOUT, SET_LOGIN, SET_AUTHENTICATED_LOGIN } from 'features/Auth/UserSlice';
 import Axios from 'axios';
+import Profile from 'features/Profile';
 
 const theme = createMuiTheme({
   palette: {
@@ -58,6 +59,7 @@ function App() {
         <div className="container">
           <Switch>
             <Route exact path='/' component={NewFeed}></Route>
+            <Route path='/profile' component={Profile}></Route>
             <Route path='/signup' component={Auth}></Route>
             <Route path='/login' component={Auth}></Route>
           </Switch>

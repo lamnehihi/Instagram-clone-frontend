@@ -49,11 +49,11 @@ function Signup(props) {
   };
 
   const userSignUp = useSelector((state) => state.user);
+  console.log("sign up");
 
   return (
     <div>
       <Grid container className={classes.root}>
-        <Grid item sm />
         <Grid item sm>
           <Paper item sm className={classes.box} elevation={15}>
             <img
@@ -167,7 +167,6 @@ function Signup(props) {
             </Link>
           </Paper>
         </Grid>
-        <Grid item sm />
       </Grid>
       <footer className={classes.footer}>
         <Typography>© 2020 INSTAGRAM CLONE FROM LAMNEHIHI</Typography>

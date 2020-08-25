@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
-import { LOADING_UI, SET_ERRORS } from "./UiSlice";
+import { LOADING_UI, SET_ERRORS, LOADING_DONE } from "./UiSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -9,6 +9,7 @@ const initialState = {
   credentials: {},
   likes: [],
   notifications: [],
+  screams: [],
 };
 
 export const setAuthorizationHeader = (token) => {
@@ -74,6 +75,8 @@ export const SET_LOGIN = createAsyncThunk(
     const dispatch = thunkApi.dispatch;
     const res = await Axios.get("/user");
     dispatch(SET_USER(res.data));
+    dispatch(LOADING_DONE());
+    
   }
 );
 

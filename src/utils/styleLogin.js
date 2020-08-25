@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core";
 const styleLogin = makeStyles((theme) => ({
   root: {
     textAlign: "center",
+    display: 'flex',
+    justifyContent: "center",
     "& .MuiInputBase-input": {
       height: "15px",
     },
