@@ -10,10 +10,13 @@ import {
   Hidden,
   IconButton,
   Grid,
+  ButtonBase,
+  Tooltip,
 } from "@material-ui/core";
 
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import { useHistory } from "react-router-dom";
+import EditAvatar from "../EditAvatar";
 
 Bio.propTypes = {
   user: PropTypes.object.isRequired,
@@ -112,15 +115,25 @@ function Bio(props) {
   const handleOnClick = () => {
     history.push('/profile/edit');
   }
+
+  const handleImageClick = () => {
+    const input = document.getElementById("imageInput");
+    input.click();
+  }
   return (
     <Box className={classes.root} position="relative">
       <Grid xs={4} className="avatar">
+      <Tooltip title="Edit Avatar" placement="top">
+      <ButtonBase disableRipple onClick={handleImageClick}>
         <Avatar
           alt={user.handle}
           src={user.imageUrl}
           className={classes.large}
           variant="circle"
         />
+        </ButtonBase>
+        </Tooltip>
+        <EditAvatar />
       </Grid>
       <Grid xs={8}>
         <Box

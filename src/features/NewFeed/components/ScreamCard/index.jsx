@@ -29,7 +29,7 @@ ScreamCard.defaultProps = {
 
 const useStyle = makeStyles((theme) => ({
   root: {
-    maxWidth: 500,
+    width: "100%",
     margin: "auto",
     marginBottom: "1.5rem",
     paddingBottom: '.3rem',

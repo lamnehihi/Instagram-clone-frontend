@@ -13,21 +13,21 @@ ScreamList.defaultProps = {
 
 const useStyle = makeStyles((theme) => ({
   root: {
-    alignItems: 'center',
-    width: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    
   },
-}))
+}));
 
 function ScreamList(props) {
   const { screams } = props;
   const classes = useStyle();
   return (
-    <Grid item xs={12} lg={8} className={`${classes.root}`}>
-      {
-        screams.map((scream, index) => {
-          return <ScreamCard key={index} scream={scream} /> 
-        })
-      }
+    <Grid item className={`${classes.root}`} xs={7}>
+      {screams.map((scream, index) => {
+        return <ScreamCard key={index} scream={scream} />;
+      })}
     </Grid>
   );
 }

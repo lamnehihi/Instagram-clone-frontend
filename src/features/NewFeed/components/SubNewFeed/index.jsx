@@ -8,11 +8,9 @@ SubNewFeed.propTypes = {
 
 function SubNewFeed(props) {
   return (
-    <Hidden mdDown>
-        <Grid item lg={4}>
+        <Grid item xs={5}>
           suggest
         </Grid>
-      </Hidden>
   );
 }
 

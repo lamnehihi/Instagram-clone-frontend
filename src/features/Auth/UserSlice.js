@@ -70,13 +70,11 @@ export const SET_LOGOUT = createAsyncThunk(
 export const SET_LOGIN = createAsyncThunk(
   "users/set_login",
   async (action, thunkApi) => {
-    console.log("action", action);
     console.log("set login")
     const dispatch = thunkApi.dispatch;
     const res = await Axios.get("/user");
     dispatch(SET_USER(res.data));
     dispatch(LOADING_DONE());
-    
   }
 );
 
