@@ -11,11 +11,11 @@ import TvIcon from '@material-ui/icons/Tv';
 import TurnedInNotSharpIcon from '@material-ui/icons/TurnedInNotSharp';
 import LoyaltySharpIcon from '@material-ui/icons/LoyaltySharp';
 
-Activity.propTypes = {
+VisitActivity.propTypes = {
   screams: PropTypes.array,
 };
 
-Activity.defaultProps = {
+VisitActivity.defaultProps = {
   screams: [],
 };
 
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) =>({
   },
 }));
 
-function Activity(props) {
+function VisitActivity(props) {
   const screams = props;
   const classes = useStyles();
 
@@ -78,6 +78,8 @@ function Activity(props) {
         onChange={handleChange}
         aria-label="simple tabs example"
         centered
+        variant="scrollable"
+        scrollButtons="off"
       >
         <Tab label="SCREAMS" icon={<AppsIcon fontSize="small" />} {...a11yProps(0)} />
         <Tab label="SCTV" {...a11yProps(1)} icon={<TvIcon fontSize="small" />}/>
@@ -93,4 +95,4 @@ function Activity(props) {
   );
 }
 
-export default Activity;
+export default VisitActivity;

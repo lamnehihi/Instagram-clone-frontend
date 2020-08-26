@@ -7,8 +7,6 @@ Scream.propTypes = {
 };
 
 function Scream(props) {
-  
-
   return (
     <div>
       Single Scream

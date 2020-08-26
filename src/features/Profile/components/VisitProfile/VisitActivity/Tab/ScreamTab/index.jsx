@@ -7,12 +7,8 @@ import {
   GridList,
   makeStyles,
   GridListTile,
-  Button,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { tableTabStyle, defaultTableTabProps } from "features/Profile/Style/tableTabStyle";
-
-import AppsIcon from "@material-ui/icons/Apps";
 
 ScreamTab.propTypes = {
   index: PropTypes.any.isRequired,
@@ -51,26 +47,22 @@ const useStyles = makeStyles((theme) => ({
 
 function ScreamTab(props) {
   const { children, value, index, ...other } = props;
-  const screams = useSelector((state) => state.user.screams);
+  const screams = useSelector((state) => state.profile.screams);
   console.log("my scream", screams);
 
-  const classess = useStyles();
-  const classes = tableTabStyle();
+  const classes = useStyles();
 
-const defaultProps = defaultTableTabProps;
-
-
-  return screams.length > 0 ? (
+  return (
     <div
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      className={classess.root}
+      className={classes.root}
     >
       {value === index && (
-        <GridList cellHeight="auto" className={classess.gridList} cols={3}>
+        <GridList cellHeight="auto" className={classes.gridList} cols={3}>
           {screams.map((scream) => {
             return (
               <GridListTile key={scream.imageUrl} cols={scream.cols || 1}>
@@ -79,31 +71,6 @@ const defaultProps = defaultTableTabProps;
             );
           })}
         </GridList>
-      )}
-    </div>
-  ) : (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <div className={classes.root}>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            borderRadius="50%"
-            {...defaultProps}
-          >
-            <AppsIcon fontSize="" />
-          </Box>
-          <Typography variant="h3">Upload a Post</Typography>
-          <Typography>Post show your energy for a new day.</Typography>
-          <Button size="small">Upload</Button>
-        </div>
       )}
     </div>
   );

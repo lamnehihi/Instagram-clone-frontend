@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
-import styleSignup from "utils/styleSignup";
+import styleSignup from "features/Auth/Style/styleSignup";
 import { SET_AUTHENTICATED_SIGNUP } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 

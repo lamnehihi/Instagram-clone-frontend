@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { LOADING_UI, SET_ERRORS, LOADING_DONE } from "./UiSlice";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 
 const initialState = {
   authenticated: false,
@@ -67,6 +65,7 @@ export const SET_LOGOUT = createAsyncThunk(
   }
 );
 
+//set user info
 export const SET_LOGIN = createAsyncThunk(
   "users/set_login",
   async (action, thunkApi) => {
@@ -91,6 +90,16 @@ const user = createSlice({
         ...action.payload,
       };
     },
+    SET_LIKE_USER: (state, action) => {
+      state.likes.push(action.payload);
+    },
+    SET_UNLIKE_USER: (state, action) => {
+      const screamId = action.payload;
+      return {
+        ...state,
+        likes: state.likes.filter(like => like.screamId !== screamId),
+      }
+    }
   },
   extraReducers: {
     [SET_LOGIN.fulfilled]: (state, action) => {
@@ -100,5 +109,5 @@ const user = createSlice({
 });
 
 const { reducer, actions } = user;
-export const { SET_USER, SET_UNAUTHENTICATED } = actions;
+export const { SET_USER, SET_UNAUTHENTICATED, SET_LIKE_USER, SET_UNLIKE_USER } = actions;
 export default reducer;
