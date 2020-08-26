@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
-import styleLogin from "utils/styleLogin";
+import styleLogin from "features/Auth/Style/styleLogin";
 import { SET_AUTHENTICATED_LOGIN } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 

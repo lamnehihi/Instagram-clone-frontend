@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -14,22 +14,21 @@ import {
   Link,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
+
 import dayjs from "dayjs";
+import ScreamDialog from "../ScreamDialog";
 
-ScreamCard.propTypes = {
-  scream: PropTypes.object,
-};
-
-ScreamCard.defaultProps = {
-  scream: {},
-};
 
 const useStyle = makeStyles((theme) => ({
   root: {
-    maxWidth: 500,
+    width: "100%",
     margin: "auto",
     marginBottom: "1.5rem",
     paddingBottom: '.3rem',
@@ -60,8 +59,21 @@ const useStyle = makeStyles((theme) => ({
   }
 }));
 
+ScreamCard.propTypes = {
+  scream: PropTypes.object,
+  isLike: PropTypes.bool,
+  handleLike: PropTypes.func,
+};
+
+ScreamCard.defaultProps = {
+  scream: {},
+  isLike: false,
+  handleLike: null,
+};
+
 function ScreamCard(props) {
-  const { scream } = props;
+  const { scream, isLike, handleLike } = props;
+  let {  } = props
   const {
     body,
     commentCount,
@@ -73,15 +85,35 @@ function ScreamCard(props) {
   } = scream;
   const classes = useStyle();
 
+  const handleOnLike = () => {
+    if(handleLike) {
+      handleLike(scream.screamId, isLike);
+    }
+  }
+
   var relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
+
+  const [open, setOpen] = React.useState(false);
+
+  const nums = [0,1,2,3]
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Card elevation={15} className={`${classes.root} card`}>
       <CardHeader
         avatar={<Avatar alt={userHandle} src={userImage} />}
         action={
-          <IconButton aria-label="more-action">
+          <IconButton aria-label="more-action" onClick={handleClickOpen}>
             <MoreHorizIcon />
+          <ScreamDialog open={open} onClose={handleClose}/>
           </IconButton>
         }
         title={
@@ -97,8 +129,10 @@ function ScreamCard(props) {
       />
       <Box>
         <CardActions disableSpacing>
-          <IconButton aria-label="like">
-            <FavoriteBorderIcon className={classes.bold} />
+          <IconButton aria-label="like" onClick={handleOnLike}>
+          {
+            isLike ? <FavoriteIcon className={classes.bold} /> : <FavoriteBorderIcon className={classes.bold} />
+          }
           </IconButton>
           <IconButton aria-label="comment">
             <ChatBubbleOutlineIcon className={classes.bold} />
