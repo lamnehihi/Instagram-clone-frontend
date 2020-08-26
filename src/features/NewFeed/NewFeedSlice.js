@@ -57,6 +57,25 @@ export const FLETCH_SCREAMS = createAsyncThunk(
   }
 )
 
+export const DELETE_SCREAMS = createAsyncThunk(
+  "screams/delete",
+  async (action, thunkAPI) => {
+    try {
+      const FBToken = localStorage.getItem("FBIdToken");
+      Axios.defaults.headers.common["Authorization"] = FBToken;
+
+      Axios.defaults.baseURL =
+      "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
+      const screamId = action;
+      const res = await Axios.delete(`scream/${screamId}`);
+      return screamId;
+    } catch (error) {
+      console.log("error", error.response.data);
+      thunkAPI.dispatch(SET_ERRORS(error.response.data));
+    }
+  }
+)
+
 const newFeed = createSlice({
   name: "newFeed",
   initialState: initialScreams,
@@ -79,6 +98,10 @@ const newFeed = createSlice({
         })
       state[screamIndex].likeCount -= 1;
     },
+    [DELETE_SCREAMS.fulfilled] : (state, action) => {
+      const screamId = action.payload;
+      return state.filter(scream => scream.screamId !== screamId);
+    }
   }
 })
 

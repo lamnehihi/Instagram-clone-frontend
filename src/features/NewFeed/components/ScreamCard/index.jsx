@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, createRef } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
@@ -24,14 +24,23 @@ import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 
 import dayjs from "dayjs";
 import ScreamDialog from "../ScreamDialog";
-
+import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { DELETE_SCREAMS } from "features/NewFeed/NewFeedSlice";
+import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
 
 const useStyle = makeStyles((theme) => ({
   root: {
     width: "100%",
     margin: "auto",
     marginBottom: "1.5rem",
-    paddingBottom: '.3rem',
+    paddingBottom: ".3rem",
+    "& a": {
+      textDecoration: "none",
+    },
+    "& a:hover": {
+      textDecoration: "underline",
+    },
   },
   media: {
     height: 100,
@@ -46,6 +55,7 @@ const useStyle = makeStyles((theme) => ({
   },
   text: {
     paddingLeft: ".5rem",
+    wordWrap: 'break-word',
   },
   moveUp: {
     marginTop: "-2rem",
@@ -53,9 +63,34 @@ const useStyle = makeStyles((theme) => ({
   grey: {
     color: "#8e8e8e",
   },
-  comment : {
+  comment: {
     marginLeft: "1.5rem",
-    fontSize: '12px'
+    fontSize: "12px",
+  },
+  noImage: {
+    "& span": {
+      position: "absolute",
+      top: "0%",
+      left: "0%",
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems : "center",
+      flexWrap: "wrap",
+      backgroundColor: "#00000050",
+      "& .MuiTypography-root" :{
+        width: "80%",
+        fontSize: "28px",
+        wordWrap: 'break-word',
+        color: '#fff',
+        textShadow: "#000000 1px 1px 20px",
+        textAlign: "center",
+      }
+    },
+  },
+  textBody: {
+    width: "90%"
   }
 }));
 
@@ -73,7 +108,8 @@ ScreamCard.defaultProps = {
 
 function ScreamCard(props) {
   const { scream, isLike, handleLike } = props;
-  let {  } = props
+  const { authenticated, credentials } = useSelector((state) => state.user);
+  let {} = props;
   const {
     body,
     commentCount,
@@ -86,25 +122,39 @@ function ScreamCard(props) {
   const classes = useStyle();
 
   const handleOnLike = () => {
-    if(handleLike) {
+    if (handleLike) {
       handleLike(scream.screamId, isLike);
     }
-  }
+  };
 
   var relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
 
-  const [open, setOpen] = React.useState(false);
-
-  const nums = [0,1,2,3]
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(!open);
+  };
+
+  const handleDelete = () => {
+    setOpen(!open);
+    dispatch(DELETE_SCREAMS(scream.screamId));
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  let isMyScream = false;
+  if (scream.userHandle === credentials.handle) {
+    isMyScream = true;
+  }
+
+  const randomNum = () => {
+    return Math.trunc(Math.random() * 15);
+  };
+  console.log("RandomBackGroundImage[randomNum()]", randomNum());
 
   return (
     <Card elevation={15} className={`${classes.root} card`}>
@@ -113,26 +163,52 @@ function ScreamCard(props) {
         action={
           <IconButton aria-label="more-action" onClick={handleClickOpen}>
             <MoreHorizIcon />
-          <ScreamDialog open={open} onClose={handleClose}/>
+            <ScreamDialog
+              isMyScream={isMyScream}
+              authenticated={authenticated}
+              open={open}
+              handleDelete={handleDelete}
+              handleClick={handleClickOpen}
+            />
           </IconButton>
         }
         title={
-          <Link href="#" className={`${classes.bold}`}>
+          <NavLink to={`profile/${userHandle}`} className={`${classes.bold}`}>
             {`${userHandle}`}
-          </Link>
+          </NavLink>
         }
       />
-      <CardMedia
-        className={`${classes.media} card__media`}
-        image={imageUrl}
-        title={body}
-      />
+      {imageUrl ? (
+        <CardMedia
+          className={`${classes.media}`}
+          image={imageUrl}
+          title={body}
+        />
+      ) : (
+        <Box
+          component="div"
+          className={`${classes.noImage}`}
+          position="relative"
+        >
+          <CardMedia
+            className={`${classes.media} ${classes.noImageChild}`}
+            title={body}
+            image={RandomBackGroundImage[randomNum()]}
+          />
+          <Box component="span">
+            <Typography>{body}</Typography>
+          </Box>
+        </Box>
+      )}
+
       <Box>
         <CardActions disableSpacing>
           <IconButton aria-label="like" onClick={handleOnLike}>
-          {
-            isLike ? <FavoriteIcon className={classes.bold} /> : <FavoriteBorderIcon className={classes.bold} />
-          }
+            {isLike ? (
+              <FavoriteIcon className={classes.bold} />
+            ) : (
+              <FavoriteBorderIcon className={classes.bold} />
+            )}
           </IconButton>
           <IconButton aria-label="comment">
             <ChatBubbleOutlineIcon className={classes.bold} />
@@ -150,7 +226,7 @@ function ScreamCard(props) {
             <Typography className={`${classes.bold} ${classes.text}`}>
               {userHandle}
             </Typography>
-            <Typography className={`${classes.text}`}>{body}</Typography>
+            <Typography className={`${classes.text} ${classes.textBody}`}>{body}</Typography>
           </Box>
           {commentCount === 0 ? (
             ""
@@ -161,8 +237,8 @@ function ScreamCard(props) {
           )}
         </CardContent>
         <Typography className={`${classes.comment} ${classes.grey}`}>
-        {dayjs(createAt).fromNow()}
-      </Typography>
+          {dayjs(createAt).fromNow()}
+        </Typography>
       </Box>
     </Card>
   );

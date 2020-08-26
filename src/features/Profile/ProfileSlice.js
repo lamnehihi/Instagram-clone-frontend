@@ -27,9 +27,10 @@ export const EDIT_AVATAR = createAsyncThunk(
 
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
-      await Axios.post("user/uploadImg", formData);
+      //await Axios.post("user/uploadImg", formData);
+      console.log("form data", formData);
       const { dispatch } = thunkAPI;
-      dispatch(SET_LOGIN());
+      //dispatch(SET_LOGIN());
     } catch (error) {
       console.log(error);
     }
