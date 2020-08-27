@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -55,7 +55,7 @@ const useStyle = makeStyles((theme) => ({
   },
   text: {
     paddingLeft: ".5rem",
-    wordWrap: 'break-word',
+    wordWrap: "break-word",
   },
   moveUp: {
     marginTop: "-2rem",
@@ -76,22 +76,37 @@ const useStyle = makeStyles((theme) => ({
       height: "100%",
       display: "flex",
       justifyContent: "center",
-      alignItems : "center",
+      alignItems: "center",
       flexWrap: "wrap",
       backgroundColor: "#00000050",
-      "& .MuiTypography-root" :{
+      "& .MuiTypography-root": {
         width: "80%",
+        maxHeight: "90%",
         fontSize: "28px",
-        wordWrap: 'break-word',
-        color: '#fff',
+        wordWrap: "break-word",
+        color: "#fff",
         textShadow: "#000000 1px 1px 20px",
         textAlign: "center",
-      }
+        overflow: "hidden !important",
+        textOverflow: "ellipsis",
+      },
+      [theme.breakpoints.down("xs")]: {
+        "& .MuiTypography-root": {
+          fontSize: "18px",
+          wordWrap: "break-word",
+        },
+      },
+      [theme.breakpoints.down("sm")]: {
+        "& .MuiTypography-root": {
+          fontSize: "22px",
+          wordWrap: "break-word",
+        },
+      },
     },
   },
   textBody: {
-    width: "90%"
-  }
+    width: "90%",
+  },
 }));
 
 ScreamCard.propTypes = {
@@ -154,7 +169,23 @@ function ScreamCard(props) {
   const randomNum = () => {
     return Math.trunc(Math.random() * 15);
   };
-  console.log("RandomBackGroundImage[randomNum()]", randomNum());
+  let indexPic = RandomBackGroundImage[3];
+  useEffect(()=> {
+    indexPic = RandomBackGroundImage[randomNum()];
+    //console.log("indexPic", indexPic)
+  },[])
+
+  function add3Dots(string, limit) {
+    var dots = "...";
+    const showMore = " Show more";
+    if (string.length > limit) {
+      // you can also use substr instead of substring
+      string = string.substring(0, limit) + dots + showMore;
+    }
+
+    return string;
+  }
+
 
   return (
     <Card elevation={15} className={`${classes.root} card`}>
@@ -193,7 +224,7 @@ function ScreamCard(props) {
           <CardMedia
             className={`${classes.media} ${classes.noImageChild}`}
             title={body}
-            image={RandomBackGroundImage[randomNum()]}
+            image={indexPic}
           />
           <Box component="span">
             <Typography>{body}</Typography>
@@ -226,7 +257,9 @@ function ScreamCard(props) {
             <Typography className={`${classes.bold} ${classes.text}`}>
               {userHandle}
             </Typography>
-            <Typography className={`${classes.text} ${classes.textBody}`}>{body}</Typography>
+            <Typography className={`${classes.text} ${classes.textBody}`}>
+              {add3Dots(body, 80)}
+            </Typography>
           </Box>
           {commentCount === 0 ? (
             ""

@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Grid, makeStyles } from "@material-ui/core";
 import ScreamCard from "../ScreamCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { SET_LIKE_SCREAM, SET_UNLIKE_SCREAM } from "features/NewFeed/NewFeedSlice";
+import {
+  SET_LIKE_SCREAM,
+  SET_UNLIKE_SCREAM,
+  POST_SCREAM,
+} from "features/NewFeed/NewFeedSlice";
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
+import ScreamPost from "../ScreamPost";
 
 ScreamList.propTypes = {
   screams: PropTypes.array,
@@ -22,7 +27,6 @@ const useStyle = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
     flexWrap: "wrap",
-
   },
 }));
 
@@ -30,42 +34,68 @@ function ScreamList(props) {
   const { screams, likes } = props;
   const classes = useStyle();
   const checkLike = (scream) => {
-    const {screamId} = scream;
-    const index = likes.findIndex(like => { 
-      if(like.screamId === screamId) return like
+    const { screamId } = scream;
+    const index = likes.findIndex((like) => {
+      if (like.screamId === screamId) return like;
     });
-    if(index >= 0) return true;
-    else return false
-  }  
+    if (index >= 0) return true;
+    else return false;
+  };
 
-  const { authenticated, credentials } = useSelector(state => state.user);
+  const { authenticated, credentials } = useSelector((state) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleLike = (screamId, isLike) => {
-    if(authenticated) {
+    if (authenticated) {
       console.log("like", screamId);
-      if(!isLike) {
+      if (!isLike) {
         const newLike = {
           screamId,
-          userHandle : credentials.handle,
-        }
+          userHandle: credentials.handle,
+        };
         dispatch(SET_LIKE_SCREAM(newLike));
         dispatch(SET_LIKE_USER(newLike));
-      }else{
+      } else {
         dispatch(SET_UNLIKE_SCREAM(screamId));
         dispatch(SET_UNLIKE_USER(screamId));
       }
+    } else {
+      history.push("/login");
     }
-    else {
-      history.push("/login")
+  };
+
+  const formData = new FormData();
+
+  const handlePost = (body) => {
+    if (body.trim() !== "") {
+      formData.append("body", body);
     }
-  }
+    dispatch(POST_SCREAM(formData));
+  };
+
+  const handleImageChange = (image) => {
+    formData.delete("image");
+    formData.append("image", image, image.name);
+  };
 
   return (
     <Grid item className={`${classes.root}`} xs={7}>
+      <ScreamPost
+        handleImageChange={handleImageChange}
+        handlePost={handlePost}
+        authenticated={authenticated}
+        credentials={credentials}
+      />
       {screams.map((scream, index) => {
-        return <ScreamCard key={index} scream={scream} isLike={checkLike(scream)} handleLike={handleLike}/>;
+        return (
+          <ScreamCard
+            key={index}
+            scream={scream}
+            isLike={checkLike(scream)}
+            handleLike={handleLike}
+          />
+        );
       })}
     </Grid>
   );

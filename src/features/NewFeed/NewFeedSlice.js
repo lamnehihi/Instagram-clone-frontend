@@ -76,6 +76,30 @@ export const DELETE_SCREAMS = createAsyncThunk(
   }
 )
 
+export const POST_SCREAM = createAsyncThunk(
+  "screams/post",
+  async (action, thunkAPI) => {
+    try {
+      const FBToken = localStorage.getItem("FBIdToken");
+      Axios.defaults.headers.common["Authorization"] = FBToken;
+
+      Axios.defaults.baseURL =
+      "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
+      const formData = action;
+      const res = await Axios.post('scream/', formData);
+      console.log("res data", res.data);
+      thunkAPI.dispatch(ADD_SCREAM(res.data));
+      const newScream = {...res.data};
+      newScream.screamId = newScream.id;
+      console.log("newScream", newScream);
+      return newScream;
+    } catch (error) {
+      console.log("error", error.response.data);
+      thunkAPI.dispatch(SET_ERRORS(error.response.data));
+    }
+  }
+)
+
 const newFeed = createSlice({
   name: "newFeed",
   initialState: initialScreams,
@@ -84,6 +108,9 @@ const newFeed = createSlice({
       console.log("action", action.payload);
       return state = [...action.payload];
     },
+    ADD_SCREAM: (state, action) => {
+      state.unshift(action.payload);
+    }
   },
   extraReducers: {
     [SET_LIKE_SCREAM.fulfilled] : (state, action) => {
@@ -101,10 +128,10 @@ const newFeed = createSlice({
     [DELETE_SCREAMS.fulfilled] : (state, action) => {
       const screamId = action.payload;
       return state.filter(scream => scream.screamId !== screamId);
-    }
+    },
   }
 })
 
 const {reducer, actions} = newFeed;
-export const { FLETCH } = actions;
+export const { FLETCH, ADD_SCREAM } = actions;
 export default reducer;

@@ -3,7 +3,11 @@
 }
 
 #avatar {
-  margin-top: .4rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 33px !important;
 }
 
 .navbar{
@@ -16,14 +20,12 @@
   &__menu {
     display: flex;
     align-items: center;
-
     > a {
       color: #000;
-      height: 30px !important;
-      margin: 0rem .7rem;
       
       > svg {
         font-size: 30px;
+        color: #000 !important;
       }
     }
   }

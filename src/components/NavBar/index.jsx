@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {
@@ -15,14 +14,12 @@ import {
   MenuItem,
   Divider,
 } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import HomeIcon from "@material-ui/icons/Home";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
-import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import ExploreIcon from "@material-ui/icons/Explore";
 import ExploreOutlinedIcon from "@material-ui/icons/ExploreOutlined";
 
@@ -74,6 +71,15 @@ const useStyles = makeStyles((theme) => ({
   relative: {
     display: "relative",
   },
+  black: {
+    color: "#262626 !important",
+    "& svg": {
+      color: "#262626 !important",
+    },
+    "& .MuiButtonBase-root": {
+      margin: "0rem .7rem",
+    },
+  },
 }));
 
 function NavBar(props) {
@@ -89,8 +95,29 @@ function NavBar(props) {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  //0-post 1-home 2-explore 3-noti 4-profile
+  const [clickAt, setClickAt] = useState(1);
+
+  const handleMenuItemClick = (number) => {
+    switch (number) {
+      case 1:
+        setClickAt(1)
+        break;
+      case 2:
+        setClickAt(2)
+        break;
+      case 3:
+        setClickAt(3)
+        break;
+      default:
+        setClickAt(1)
+        break;
+    }
+  };
+
   const handleClick = (event) => {
     event.preventDefault();
+    setClickAt(4)
     console.log("object");
     setAnchorEl(event.currentTarget);
   };
@@ -156,17 +183,43 @@ function NavBar(props) {
                 </form>
               </Hidden>
 
-              <Box className="navbar__menu" display="flex">
-                <Box className="navbar__menu__item" component={Link} to="/">
-                  <HomeOutlinedIcon fontSize="large" />
-                </Box>
-                <Box className="navbar__menu__item" component={Link} to="/">
-                  <ExploreOutlinedIcon fontSize="large" />
-                </Box>
-                <Box className="navbar__menu__item" component={Link} to="/">
-                  <FavoriteBorderOutlinedIcon fontSize="large" />
-                </Box>
-
+              <Box className={`${classes.black} navbar__menu`} display="flex">
+                <ButtonBase
+                  disableRipple
+                  onClick={() => handleMenuItemClick(1)}
+                >
+                  <Box className="navbar__menu__item" component={Link} to="/">
+                    {clickAt === 1 ? (
+                      <HomeIcon fontSize="large" />
+                    ) : (
+                      <HomeOutlinedIcon fontSize="large" />
+                    )}
+                  </Box>
+                </ButtonBase>
+                <ButtonBase
+                  disableRipple
+                  onClick={() => handleMenuItemClick(2)}
+                >
+                  <Box className="navbar__menu__item" component={Link} to="/">
+                    {clickAt === 2 ? (
+                      <ExploreIcon fontSize="large" />
+                    ) : (
+                      <ExploreOutlinedIcon fontSize="large" />
+                    )}
+                  </Box>
+                </ButtonBase>
+                <ButtonBase
+                  disableRipple
+                  onClick={() => handleMenuItemClick(3)}
+                >
+                  <Box className="navbar__menu__item" component={Link} to="/">
+                    {clickAt === 3 ? (
+                      <FavoriteIcon fontSize="large" />
+                    ) : (
+                      <FavoriteBorderOutlinedIcon fontSize="large" />
+                    )}
+                  </Box>
+                </ButtonBase>
                 {user.imageUrl ? (
                   <Box
                     className="navbar__menu__item"
@@ -209,25 +262,23 @@ function NavBar(props) {
                     </Menu>
                   </Box>
                 ) : (
-                  <Box
-                    className="navbar__menu__item"
-                    id="avatar"
-                    component={Link}
-                  >
-                    <IconButton
-                      className={`${classes.small} ${classes.avatar} `}
-                      aria-label="more"
-                      aria-controls="long-menu"
-                      aria-haspopup="true"
-                      onClick={handleLoginClick}
-                    >
-                      <Avatar
-                        alt="avatar"
-                        src={user.imageUrl ? user.imageUrl : ""}
-                        className={classes.small}
-                      />
-                    </IconButton>
-                  </Box>
+                  <div className="navbar__menu__item" id="avatar">
+                    <Box>
+                      <IconButton
+                        className={`${classes.small} ${classes.avatar} `}
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        onClick={handleLoginClick}
+                      >
+                        <Avatar
+                          alt="avatar"
+                          src={user.imageUrl ? user.imageUrl : ""}
+                          className={classes.small}
+                        />
+                      </IconButton>
+                    </Box>
+                  </div>
                 )}
               </Box>
             </Grid>
