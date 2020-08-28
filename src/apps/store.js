@@ -4,6 +4,7 @@ import newFeedReducer from "features/NewFeed/NewFeedSlice";
 import userReducer from "features/Auth/UserSlice";
 import UiReducer from "features/Auth/UiSlice";
 import profileReducer from "features/Profile/ProfileSlice";
+import screamReducer from "features/Scream/ScreamSlice";
 
 
 
@@ -13,6 +14,7 @@ const rootReducer = {
   user: userReducer,
   ui: UiReducer,
   profile: profileReducer,
+  scream: screamReducer,
 }
 
 const store = configureStore({

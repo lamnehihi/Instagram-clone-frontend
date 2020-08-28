@@ -11,13 +11,13 @@ Profile.propTypes = {};;
 
 function Profile(props) {
   const match = useRouteMatch();
-  console.log("profile mount");
+  console.log("profile mount", {match});
   return (
     <div>
       <NavBar />
 
       <Switch>
-        <Route exact path={match.url} component={Main}></Route>
+        <Route exact path={`${match.url}`} component={Main}></Route>
         <Route exact path={`${match.url}/edit`} component={Edit}></Route>
         <Route exact path={`${match.url}/:handle`} component={VisitUser}></Route>
       </Switch>

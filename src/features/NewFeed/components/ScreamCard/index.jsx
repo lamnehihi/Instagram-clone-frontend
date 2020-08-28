@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect } from "react";
+import React, { useState, createRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -11,8 +11,6 @@ import {
   CardContent,
   Typography,
   Box,
-  Link,
-  Slide,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
@@ -25,90 +23,13 @@ import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 
 import dayjs from "dayjs";
 import ScreamDialog from "../ScreamDialog";
-import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { DELETE_SCREAMS } from "features/NewFeed/NewFeedSlice";
 import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
+import { Link, NavLink } from "react-router-dom";
+import { ScreamCardStyle } from "features/NewFeed/Style/ScreamCardStyle";
 
-const useStyle = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    margin: "auto",
-    marginBottom: "1.5rem",
-    paddingBottom: ".3rem",
-    "& a": {
-      textDecoration: "none",
-    },
-    "& a:hover": {
-      textDecoration: "underline",
-    },
-  },
-  media: {
-    height: 100,
-    paddingTop: "56.25%",
-  },
-  iconLeft: {
-    marginLeft: "auto",
-  },
-  bold: {
-    color: "#262626",
-    fontWeight: "bold",
-  },
-  text: {
-    paddingLeft: ".5rem",
-    wordWrap: "break-word",
-  },
-  moveUp: {
-    marginTop: "-2rem",
-  },
-  grey: {
-    color: "#8e8e8e",
-  },
-  comment: {
-    marginLeft: "1.5rem",
-    fontSize: "12px",
-  },
-  noImage: {
-    "& span": {
-      position: "absolute",
-      top: "0%",
-      left: "0%",
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexWrap: "wrap",
-      backgroundColor: "#00000050",
-      "& .MuiTypography-root": {
-        width: "80%",
-        maxHeight: "90%",
-        fontSize: "28px",
-        wordWrap: "break-word",
-        color: "#fff",
-        textShadow: "#000000 1px 1px 20px",
-        textAlign: "center",
-        overflow: "hidden !important",
-        textOverflow: "ellipsis",
-      },
-      [theme.breakpoints.down("xs")]: {
-        "& .MuiTypography-root": {
-          fontSize: "18px",
-          wordWrap: "break-word",
-        },
-      },
-      [theme.breakpoints.down("sm")]: {
-        "& .MuiTypography-root": {
-          fontSize: "22px",
-          wordWrap: "break-word",
-        },
-      },
-    },
-  },
-  textBody: {
-    width: "90%",
-  },
-}));
+
 
 ScreamCard.propTypes = {
   scream: PropTypes.object,
@@ -125,7 +46,6 @@ ScreamCard.defaultProps = {
 function ScreamCard(props) {
   const { scream, isLike, handleLike } = props;
   const { authenticated, credentials } = useSelector((state) => state.user);
-  let {} = props;
   const {
     body,
     commentCount,
@@ -134,8 +54,9 @@ function ScreamCard(props) {
     likeCount,
     userHandle,
     userImage,
+    screamId
   } = scream;
-  const classes = useStyle();
+  const classes = ScreamCardStyle();
 
   const handleOnLike = () => {
     if (handleLike) {
@@ -158,23 +79,19 @@ function ScreamCard(props) {
     dispatch(DELETE_SCREAMS(scream.screamId));
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   let isMyScream = false;
   if (scream.userHandle === credentials.handle) {
     isMyScream = true;
   }
 
   const randomNum = () => {
-    return Math.trunc(Math.random() * 15);
+    return Math.trunc(Math.random() * 3);
   };
-  let indexPic = RandomBackGroundImage[3];
-  useEffect(()=> {
-    indexPic = RandomBackGroundImage[randomNum()];
-    //console.log("indexPic", indexPic)
-  },[])
+  const indexPic = useRef(RandomBackGroundImage[2]);
+  useEffect(() => {
+    indexPic.current = RandomBackGroundImage[randomNum()];
+    console.log("indexPic", indexPic);
+  }, []);
 
   function add3Dots(string, limit) {
     var dots = "...";
@@ -207,9 +124,9 @@ function ScreamCard(props) {
           </IconButton>
         }
         title={
-          <NavLink to={`profile/${userHandle}`} className={`${classes.bold}`}>
+          <Link to={`profile/${userHandle}`} className={`${classes.bold}`}>
             {`${userHandle}`}
-          </NavLink>
+          </Link>
         }
       />
       {imageUrl ? (
@@ -227,7 +144,7 @@ function ScreamCard(props) {
           <CardMedia
             className={`${classes.media} ${classes.noImageChild}`}
             title={body}
-            image={indexPic}
+            image={indexPic.current}
           />
           <Box component="span">
             <Typography>{body}</Typography>
@@ -267,14 +184,14 @@ function ScreamCard(props) {
           {commentCount === 0 ? (
             ""
           ) : (
-            <Link href="#" className={`${classes.text} ${classes.grey}`}>
+            <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.grey}`}>
               {`view all ${commentCount} comments`}
-            </Link>
+            </NavLink>
           )}
-        </CardContent>
-        <Typography className={`${classes.comment} ${classes.grey}`}>
+        <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.time} ${classes.grey}`}>
           {dayjs(createAt).fromNow()}
-        </Typography>
+        </NavLink>
+        </CardContent>
       </Box>
     </Card>
 //</Slide>

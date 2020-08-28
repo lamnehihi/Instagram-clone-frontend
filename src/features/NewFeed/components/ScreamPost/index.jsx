@@ -18,6 +18,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import { ScreamPostStyle } from "features/NewFeed/Style/ScreamPostStyle";
+import ActionDial from "./ActionDial";
 
 ScreamPost.propTypes = {
   authenticated: PropTypes.bool,
@@ -64,6 +65,7 @@ function ScreamPost(props) {
       }
     }
   };
+  
   return authenticated === true ? (
     <Card elevation={12} className={classes.root}>
       <CardHeader
@@ -106,15 +108,8 @@ function ScreamPost(props) {
       </CardContent>
       <Divider />
       <CardActions>
-        <Box display="flex" alignItems="center">
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<ImageOutlinedIcon />}
-            onClick={handleAddImage}
-          >
-            Image
-          </Button>
+        <Box alignItems="center">
+        <ActionDial handleAddImage={handleAddImage} />
           {imageName === "none" ? "" : <Typography>{imageName}</Typography>}
         </Box>
         <Button

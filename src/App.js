@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom';
 import NewFeed from 'features/NewFeed';
@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SET_LOGOUT, SET_LOGIN, SET_AUTHENTICATED_LOGIN } from 'features/Auth/UserSlice';
 import Axios from 'axios';
 import Profile from 'features/Profile';
+import Scream from 'features/Scream';
+import { FLETCH_SCREAMS } from 'features/NewFeed/NewFeedSlice';
 
 const theme = createMuiTheme({
   palette: {
@@ -50,6 +52,9 @@ function App() {
       dispatch(SET_LOGIN());
     }
   }
+  useEffect(() => {
+    dispatch(FLETCH_SCREAMS());
+  }, [])
   return (
     <div className="social-app">
     <ThemeProvider theme={theme}>
@@ -59,9 +64,10 @@ function App() {
         <div className="container">
           <Switch>
             <Route exact path='/' component={NewFeed}></Route>
+            <Route exact path='/posts/:screamId' component={Scream}></Route>
             <Route path='/profile' component={Profile}></Route>
-            <Route path='/signup' component={Auth}></Route>
-            <Route path='/login' component={Auth}></Route>
+            <Route exact path='/signup' component={Auth}></Route>
+            <Route exact path='/login' component={Auth}></Route>
           </Switch>
         </div>
         </BrowserRouter>
