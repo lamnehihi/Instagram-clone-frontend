@@ -34,8 +34,7 @@ function ScreamPost(props) {
   const classes = ScreamPostStyle();
   const { authenticated, credentials } = props;
   const [body, setBody] = useState("");
-  const [imageName, setImageName] = useState('none');
-
+  const [imageName, setImageName] = useState("none");
 
   const handleAddImage = () => {
     const imageInput = document.getElementById("image");
@@ -51,15 +50,18 @@ function ScreamPost(props) {
 
     if (image) {
       setImageName(image.name);
-      if(handleImageChange){
+      if (handleImageChange) {
         handleImageChange(image);
       }
     }
   };
 
   const handleOnPost = () => {
-    if(handlePost) {
-      handlePost(body);
+    if (handlePost) {
+      if (body.trim() !== "") {
+        handlePost(body);
+        setBody("");
+      }
     }
   };
   return authenticated === true ? (
@@ -104,18 +106,16 @@ function ScreamPost(props) {
       </CardContent>
       <Divider />
       <CardActions>
-      <Box>
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<ImageOutlinedIcon />}
-          onClick={handleAddImage}
-        >
-          Image
-        </Button>
-        <Typography>
-          {imageName}
-        </Typography>
+        <Box display="flex" alignItems="center">
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<ImageOutlinedIcon />}
+            onClick={handleAddImage}
+          >
+            Image
+          </Button>
+          {imageName === "none" ? "" : <Typography>{imageName}</Typography>}
         </Box>
         <Button
           variant="outlined"
@@ -128,7 +128,7 @@ function ScreamPost(props) {
       </CardActions>
     </Card>
   ) : (
-    <div>false</div>
+    ""
   );
 }
 

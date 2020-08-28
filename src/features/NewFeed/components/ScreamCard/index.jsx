@@ -12,6 +12,7 @@ import {
   Typography,
   Box,
   Link,
+  Slide,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
@@ -178,16 +179,18 @@ function ScreamCard(props) {
   function add3Dots(string, limit) {
     var dots = "...";
     const showMore = " Show more";
-    if (string.length > limit) {
-      // you can also use substr instead of substring
-      string = string.substring(0, limit) + dots + showMore;
+    if(string) {
+      if (string.length > limit) {
+        // you can also use substr instead of substring
+        string = string.substring(0, limit) + dots + showMore;
+      }
     }
-
     return string;
   }
 
 
   return (
+    //<Slide direction="right" in={true} {...{timeout: 500}} style={{ transitionDelay: "200ms" }}>
     <Card elevation={15} className={`${classes.root} card`}>
       <CardHeader
         avatar={<Avatar alt={userHandle} src={userImage} />}
@@ -274,6 +277,7 @@ function ScreamCard(props) {
         </Typography>
       </Box>
     </Card>
+//</Slide>
   );
 }
 

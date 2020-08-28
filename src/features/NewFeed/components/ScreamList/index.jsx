@@ -68,15 +68,24 @@ function ScreamList(props) {
   const formData = new FormData();
 
   const handlePost = (body) => {
-    if (body.trim() !== "") {
-      formData.append("body", body);
+    formData.set("body", body);
+
+    //clone new form
+    const newForm = new FormData();
+    newForm.set("body", body);
+    if (formData.get("image")) {
+      newForm.set("image", formData.get("image"), formData.get("image").name);
     }
-    dispatch(POST_SCREAM(formData));
+    dispatch(POST_SCREAM(newForm));
+
+    //set form to null
+    formData.delete("body");
+    formData.delete("image");
   };
 
   const handleImageChange = (image) => {
     formData.delete("image");
-    formData.append("image", image, image.name);
+    formData.set("image", image, image.name);
   };
 
   return (

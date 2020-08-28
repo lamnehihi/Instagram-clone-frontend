@@ -89,10 +89,7 @@ export const POST_SCREAM = createAsyncThunk(
       const res = await Axios.post('scream/', formData);
       console.log("res data", res.data);
       thunkAPI.dispatch(ADD_SCREAM(res.data));
-      const newScream = {...res.data};
-      newScream.screamId = newScream.id;
-      console.log("newScream", newScream);
-      return newScream;
+      return res.data;
     } catch (error) {
       console.log("error", error.response.data);
       thunkAPI.dispatch(SET_ERRORS(error.response.data));
