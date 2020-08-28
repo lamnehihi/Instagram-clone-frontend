@@ -19,8 +19,6 @@ import { useHistory } from "react-router-dom";
 import EditAvatar from "../EditAvatar";
 import { bioStyle } from "features/Profile/Style/bioStyle";
 
-
-
 Bio.propTypes = {
   user: PropTypes.object.isRequired,
   screams: PropTypes.array.isRequired,
@@ -31,25 +29,25 @@ function Bio(props) {
   const classes = bioStyle();
   const history = useHistory();
   const handleOnClick = () => {
-    history.push('/profile/edit');
-  }
+    history.push("/profile/edit");
+  };
 
   const handleImageClick = () => {
     const input = document.getElementById("imageInput");
     input.click();
-  }
+  };
   return (
     <Box className={classes.root} position="relative">
       <Grid xs={4} className="avatar">
-      <Tooltip title="Edit Avatar" placement="top">
-      <ButtonBase disableRipple onClick={handleImageClick}>
-        <Avatar
-          alt={user.handle}
-          src={user.imageUrl}
-          className={classes.large}
-          variant="circle"
-        />
-        </ButtonBase>
+        <Tooltip title="Edit Avatar" placement="top">
+          <ButtonBase disableRipple onClick={handleImageClick}>
+            <Avatar
+              alt={user.handle}
+              src={user.imageUrl}
+              className={classes.large}
+              variant="circle"
+            />
+          </ButtonBase>
         </Tooltip>
         <EditAvatar />
       </Grid>
@@ -63,7 +61,9 @@ function Bio(props) {
         >
           <Typography variant="h2">{user.handle}</Typography>
           <Grid xs={12} md={3}>
-            <Button variant="outlined" onClick={handleOnClick}>Edit Profile</Button>
+            <Button variant="outlined" onClick={handleOnClick}>
+              Edit Profile
+            </Button>
           </Grid>
           <IconButton>
             <SettingsOutlinedIcon />
@@ -71,7 +71,9 @@ function Bio(props) {
         </Box>
 
         <Hidden smDown>
-          <Typography className={`${classes.section} ${classes.post}`}><span>{`${screams.length}`}</span>posts</Typography>
+          <Typography className={`${classes.section} ${classes.post}`}>
+            <span>{`${screams.length}`}</span>posts
+          </Typography>
         </Hidden>
         <Box className={`${classes.section} bio`}>
           <Typography variant="h1">{user.email}</Typography>

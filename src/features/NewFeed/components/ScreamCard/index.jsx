@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, createRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   Card,
@@ -11,11 +11,10 @@ import {
   CardContent,
   Typography,
   Box,
-  Link,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
@@ -24,40 +23,13 @@ import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 
 import dayjs from "dayjs";
 import ScreamDialog from "../ScreamDialog";
+import { useDispatch, useSelector } from "react-redux";
+import { DELETE_SCREAMS } from "features/NewFeed/NewFeedSlice";
+import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
+import { Link, NavLink } from "react-router-dom";
+import { ScreamCardStyle } from "features/NewFeed/Style/ScreamCardStyle";
 
 
-const useStyle = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    margin: "auto",
-    marginBottom: "1.5rem",
-    paddingBottom: '.3rem',
-  },
-  media: {
-    height: 100,
-    paddingTop: "56.25%",
-  },
-  iconLeft: {
-    marginLeft: "auto",
-  },
-  bold: {
-    color: "#262626",
-    fontWeight: "bold",
-  },
-  text: {
-    paddingLeft: ".5rem",
-  },
-  moveUp: {
-    marginTop: "-2rem",
-  },
-  grey: {
-    color: "#8e8e8e",
-  },
-  comment : {
-    marginLeft: "1.5rem",
-    fontSize: '12px'
-  }
-}));
 
 ScreamCard.propTypes = {
   scream: PropTypes.object,
@@ -73,7 +45,7 @@ ScreamCard.defaultProps = {
 
 function ScreamCard(props) {
   const { scream, isLike, handleLike } = props;
-  let {  } = props
+  const { authenticated, credentials } = useSelector((state) => state.user);
   const {
     body,
     commentCount,
@@ -82,57 +54,112 @@ function ScreamCard(props) {
     likeCount,
     userHandle,
     userImage,
+    screamId
   } = scream;
-  const classes = useStyle();
+  const classes = ScreamCardStyle();
 
   const handleOnLike = () => {
-    if(handleLike) {
+    if (handleLike) {
       handleLike(scream.screamId, isLike);
     }
-  }
+  };
 
   var relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
 
-  const [open, setOpen] = React.useState(false);
-
-  const nums = [0,1,2,3]
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleDelete = () => {
+    setOpen(!open);
+    dispatch(DELETE_SCREAMS(scream.screamId));
   };
+
+  let isMyScream = false;
+  if (scream.userHandle === credentials.handle) {
+    isMyScream = true;
+  }
+
+  const randomNum = () => {
+    return Math.trunc(Math.random() * 3);
+  };
+  const indexPic = useRef(RandomBackGroundImage[2]);
+  useEffect(() => {
+    indexPic.current = RandomBackGroundImage[randomNum()];
+    console.log("indexPic", indexPic);
+  }, []);
+
+  function add3Dots(string, limit) {
+    var dots = "...";
+    const showMore = " Show more";
+    if(string) {
+      if (string.length > limit) {
+        // you can also use substr instead of substring
+        string = string.substring(0, limit) + dots + showMore;
+      }
+    }
+    return string;
+  }
+
 
   return (
+    //<Slide direction="right" in={true} {...{timeout: 500}} style={{ transitionDelay: "200ms" }}>
     <Card elevation={15} className={`${classes.root} card`}>
       <CardHeader
         avatar={<Avatar alt={userHandle} src={userImage} />}
         action={
           <IconButton aria-label="more-action" onClick={handleClickOpen}>
             <MoreHorizIcon />
-          <ScreamDialog open={open} onClose={handleClose}/>
+            <ScreamDialog
+              isMyScream={isMyScream}
+              authenticated={authenticated}
+              open={open}
+              handleDelete={handleDelete}
+              handleClick={handleClickOpen}
+            />
           </IconButton>
         }
         title={
-          <Link href="#" className={`${classes.bold}`}>
+          <Link to={`profile/${userHandle}`} className={`${classes.bold}`}>
             {`${userHandle}`}
           </Link>
         }
       />
-      <CardMedia
-        className={`${classes.media} card__media`}
-        image={imageUrl}
-        title={body}
-      />
+      {imageUrl ? (
+        <CardMedia
+          className={`${classes.media}`}
+          image={imageUrl}
+          title={body}
+        />
+      ) : (
+        <Box
+          component="div"
+          className={`${classes.noImage}`}
+          position="relative"
+        >
+          <CardMedia
+            className={`${classes.media} ${classes.noImageChild}`}
+            title={body}
+            image={indexPic.current}
+          />
+          <Box component="span">
+            <Typography>{body}</Typography>
+          </Box>
+        </Box>
+      )}
+
       <Box>
         <CardActions disableSpacing>
           <IconButton aria-label="like" onClick={handleOnLike}>
-          {
-            isLike ? <FavoriteIcon className={classes.bold} /> : <FavoriteBorderIcon className={classes.bold} />
-          }
+            {isLike ? (
+              <FavoriteIcon className={classes.bold} />
+            ) : (
+              <FavoriteBorderIcon className={classes.bold} />
+            )}
           </IconButton>
           <IconButton aria-label="comment">
             <ChatBubbleOutlineIcon className={classes.bold} />
@@ -150,21 +177,24 @@ function ScreamCard(props) {
             <Typography className={`${classes.bold} ${classes.text}`}>
               {userHandle}
             </Typography>
-            <Typography className={`${classes.text}`}>{body}</Typography>
+            <Typography className={`${classes.text} ${classes.textBody}`}>
+              {add3Dots(body, 80)}
+            </Typography>
           </Box>
           {commentCount === 0 ? (
             ""
           ) : (
-            <Link href="#" className={`${classes.text} ${classes.grey}`}>
+            <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.grey}`}>
               {`view all ${commentCount} comments`}
-            </Link>
+            </NavLink>
           )}
+        <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.time} ${classes.grey}`}>
+          {dayjs(createAt).fromNow()}
+        </NavLink>
         </CardContent>
-        <Typography className={`${classes.comment} ${classes.grey}`}>
-        {dayjs(createAt).fromNow()}
-      </Typography>
       </Box>
     </Card>
+//</Slide>
   );
 }
 
