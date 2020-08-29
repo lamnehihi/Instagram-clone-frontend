@@ -24,18 +24,12 @@ export const ScreamPostStyle = makeStyles((theme) => ({
     "& .MuiCardActions-root": {
       display: "flex",
       justifyContent: "space-between",
+      "& button": {
+        backgroundColor: "#fff",
+        color: "#000",
+        height: "36px !important"
+      }
     }
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
   },
   form: {
     marginLeft: ".5rem",

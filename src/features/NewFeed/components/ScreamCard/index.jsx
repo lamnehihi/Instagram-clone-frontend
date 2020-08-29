@@ -26,8 +26,9 @@ import ScreamDialog from "../ScreamDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { DELETE_SCREAMS } from "features/NewFeed/NewFeedSlice";
 import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { ScreamCardStyle } from "features/NewFeed/Style/ScreamCardStyle";
+import useRandomImage from "hooks/useRandomImage.js";
 
 
 
@@ -69,6 +70,7 @@ function ScreamCard(props) {
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setOpen(!open);
@@ -79,20 +81,19 @@ function ScreamCard(props) {
     dispatch(DELETE_SCREAMS(scream.screamId));
   };
 
+  const handleGotoPost = () => {
+    setOpen(!open);
+    history.push(`/posts/${screamId}`)
+  }
+
   let isMyScream = false;
   if (scream.userHandle === credentials.handle) {
     isMyScream = true;
   }
 
-  const randomNum = () => {
-    return Math.trunc(Math.random() * 3);
-  };
-  const indexPic = useRef(RandomBackGroundImage[2]);
-  useEffect(() => {
-    indexPic.current = RandomBackGroundImage[randomNum()];
-    console.log("indexPic", indexPic);
-  }, []);
 
+  const {indexPic} = useRandomImage();
+  
   function add3Dots(string, limit) {
     var dots = "...";
     const showMore = " Show more";
@@ -120,6 +121,7 @@ function ScreamCard(props) {
               open={open}
               handleDelete={handleDelete}
               handleClick={handleClickOpen}
+              handleGotoPost={handleGotoPost}
             />
           </IconButton>
         }
@@ -144,7 +146,7 @@ function ScreamCard(props) {
           <CardMedia
             className={`${classes.media} ${classes.noImageChild}`}
             title={body}
-            image={indexPic.current}
+            image={indexPic}
           />
           <Box component="span">
             <Typography>{body}</Typography>
@@ -161,7 +163,7 @@ function ScreamCard(props) {
               <FavoriteBorderIcon className={classes.bold} />
             )}
           </IconButton>
-          <IconButton aria-label="comment">
+          <IconButton aria-label="comment" onClick={handleGotoPost}>
             <ChatBubbleOutlineIcon className={classes.bold} />
           </IconButton>
           <IconButton className={classes.iconLeft} aria-label="bookmark">

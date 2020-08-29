@@ -108,15 +108,16 @@ function ScreamPost(props) {
       </CardContent>
       <Divider />
       <CardActions>
-        <Box alignItems="center">
+        <Box alignItems="center" width="-webkit-fill-available;" height="40px" position="relative">
         <ActionDial handleAddImage={handleAddImage} />
           {imageName === "none" ? "" : <Typography>{imageName}</Typography>}
         </Box>
         <Button
-          variant="outlined"
+          variant="contained"
           size="small"
           startIcon={<AddCircleOutlineOutlinedIcon />}
           onClick={handleOnPost}
+          color="secondary"
         >
           Post
         </Button>

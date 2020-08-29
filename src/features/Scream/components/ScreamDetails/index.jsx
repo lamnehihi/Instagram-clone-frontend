@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import {
-  makeStyles,
   Card,
   CardContent,
   Typography,
   IconButton,
   CardMedia,
-  useTheme,
   CardHeader,
   Avatar,
   Box,
@@ -15,13 +13,13 @@ import {
   CardActions,
   TextField,
   Button,
+  Grid,
 } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import ScreamDialog from "features/NewFeed/components/ScreamDialog";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { DELETE_SCREAMS } from "features/NewFeed/NewFeedSlice";
-import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
 import "./ScreamDetails.css";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -31,144 +29,9 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import dayjs from "dayjs";
-import { createRef } from "react";
-
-const useStyle = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    width: "100%",
-    "& a": {
-      color: "#262626",
-      textDecoration: "none",
-      lineHeight: 1.5,
-    },
-    "& a:active": {
-      color: "#26262690",
-    },
-    "& ul": {
-      listStyle: "none",
-      padding: "0rem",
-    },
-    "& .MuiIconButton-root:hover": {
-      backgroundColor: "rgba(0, 0, 0,0)",
-    },
-    "& .MuiIconButton-root": {
-      padding: "0rem .85rem 0rem .85rem",
-    },
-    "& .MuiCardActions-root": {
-      padding: ".85rem .65rem .3rem .65rem",
-    },
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    width: "330px",
-  },
-  content: {
-    flex: "1 0 auto",
-    height: "300px",
-    overflowY: "scroll",
-  },
-  cover: {
-    width: "65%",
-    "& .MuiCardMedia-root": {
-      paddingTop: "100%",
-      height: "100%",
-    },
-  },
-  noImage: {
-    "& span": {
-      position: "absolute",
-      top: "0%",
-      left: "0%",
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      flexWrap: "wrap",
-      backgroundColor: "#00000050",
-      "& .MuiTypography-root": {
-        width: "80%",
-        maxHeight: "90%",
-        fontSize: "28px",
-        wordWrap: "break-word",
-        color: "#fff",
-        textShadow: "#000000 1px 1px 20px",
-        textAlign: "center",
-        overflow: "hidden !important",
-        textOverflow: "ellipsis",
-      },
-      [theme.breakpoints.down("xs")]: {
-        "& .MuiTypography-root": {
-          fontSize: "18px",
-          wordWrap: "break-word",
-        },
-      },
-      [theme.breakpoints.down("sm")]: {
-        "& .MuiTypography-root": {
-          fontSize: "22px",
-          wordWrap: "break-word",
-        },
-      },
-    },
-  },
-  bold: {
-    color: "#262626",
-    fontWeight: "bold",
-    marginRight: ".5rem",
-  },
-  boldIcon: {
-    color: "#262626",
-    fontWeight: "bold",
-  },
-  author: {
-    marginBottom: "1rem",
-    "& .MuiAvatar-root": {
-      marginRight: "1rem",
-    },
-    "& span": {
-      wordWrap: "break-word",
-    },
-    "& .author__body": {
-      width: "80%",
-    },
-  },
-  iconLeft: {
-    marginLeft: "auto",
-  },
-  moveUp: {
-    padding: "0rem 1.5rem .85rem 1.5rem",
-  },
-  grey: {
-    color: "#8e8e8e",
-  },
-  time: {
-    display: "block",
-    fontSize: "10px",
-    lineHeight: 1.8,
-  },
-  form: {
-    height: "56px",
-    padding: "0rem .5rem 0rem 1.5rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    "& .MuiInputBase-root": {
-      height: "100%",
-      borderBottom: "none",
-    },
-    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-      borderBottom: "none",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottom: "none",
-    },
-    "& .MuiInput-underline:before": {
-      borderBottom: "none",
-    },
-  },
-}));
+import { ScreamDetailsStyle } from "features/Scream/Style/ScreamDetailsStyle";
+import Scroll from "react-scroll";
+import useRandomImage from "hooks/useRandomImage.js";
 
 ScreamDetails.propTypes = {
   isLike: PropTypes.bool,
@@ -201,10 +64,11 @@ function ScreamDetails(props) {
     }
   }
 
-  const classes = useStyle();
+  const classes = ScreamDetailsStyle();
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClickOpen = () => {
     setOpen(!open);
@@ -213,16 +77,12 @@ function ScreamDetails(props) {
   const handleDelete = () => {
     setOpen(!open);
     dispatch(DELETE_SCREAMS(scream.screamId));
+    history.push('/');
   };
 
-  const randomNum = () => {
-    return Math.trunc(Math.random() * 3);
-  };
-  const indexPic = useRef(RandomBackGroundImage[2]);
-  useEffect(() => {
-    indexPic.current = RandomBackGroundImage[randomNum()];
-    console.log("indexPic", indexPic);
-  }, []);
+
+  const {indexPic} = useRandomImage();
+
 
   var relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
@@ -237,21 +97,22 @@ function ScreamDetails(props) {
     });
   };
 
-  const messagesEndRef = useRef(null);
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  };
-  
+  var Link = Scroll.Link;
+  var Element = Scroll.Element;
+
   const handleSubmit = (event) => {
-    scrollToBottom()
     event.preventDefault();
     console.log("submit comment");
+
+    const clickLink = document.getElementById("scrollLink");
+    clickLink.click();
+
     if (handleCommentSubmit) {
       if (comment.body.trim() !== "") {
         handleCommentSubmit(comment, scream.screamId);
         SetComment({
           body: "",
-        })
+        });
       }
     }
   };
@@ -259,11 +120,8 @@ function ScreamDetails(props) {
   let newComments = [...scream.comments];
   newComments.reverse();
 
-
-  //useEffect(scrollToBottom, [scream.comments]);
-
   return (
-    <Card className={classes.root} elevation={15}>
+    <Card className={classes.root} elevation={15} >
       {/* Image left */}
       {scream.imageUrl ? (
         <CardMedia
@@ -278,9 +136,9 @@ function ScreamDetails(props) {
           position="relative"
         >
           <CardMedia
-            className={`${classes.media} ${classes.noImageChild}`}
+            className={`${classes.media}`}
             title={scream.body}
-            image={indexPic.current}
+            image={indexPic}
           />
           <Box component="span">
             <Typography>{scream.body}</Typography>
@@ -290,6 +148,17 @@ function ScreamDetails(props) {
 
       {/* Content Right */}
       <div className={classes.details}>
+        <Link
+          id="scrollLink"
+          activeClass="active"
+          to="secondInsideContainer"
+          spy={true}
+          smooth={true}
+          duration={250}
+          containerId="containerElement"
+          style={{ display: "inline-block" }}
+        ></Link>
+
         {/* Header */}
         <CardHeader
           avatar={<Avatar alt={scream.userHandle} src={scream.userImage} />}
@@ -317,7 +186,7 @@ function ScreamDetails(props) {
         <Divider />
 
         {/* Body */}
-        <CardContent  className={classes.content}>
+        <CardContent className={classes.content}>
           <Box display="flex" className={classes.author}>
             <Box>
               <Avatar alt={scream.userHandle} src={scream.userImage} />
@@ -333,33 +202,72 @@ function ScreamDetails(props) {
             </Box>
           </Box>
           {/* ref={commentEndRef} */}
-          <ul onFocus={scrollToBottom}>
-            {newComments.map((comment, index) => {
-              return (
-                <li key={index}>
-                  <Box display="flex" className={classes.author}>
-                    <Box>
-                      <Avatar
-                        alt={comment.userHandle}
-                        src={comment.userImage}
-                      />
+          <Element
+            name="test7"
+            className="element"
+            id="containerElement"
+            style={{
+              position: "relative",
+              height: "100%",
+              overflowY: "scroll",
+              marginBottom: "0px",
+            }}
+          >
+            <ul id="comments">
+              {newComments.map((comment, index) => {
+                if (index === scream.comments.length - 1) {
+                  return (
+                    <li key={index}>
+                      <Box display="flex" className={classes.author}>
+                        <Box>
+                          <Avatar
+                            alt={comment.userHandle}
+                            src={comment.userImage}
+                          />
+                        </Box>
+                        <Box className="author__body">
+                          <NavLink
+                            to={`/profile/${comment.userHandle}`}
+                            className={`${classes.bold}`}
+                          >
+                            {`${comment.userHandle}`}
+                          </NavLink>
+                          <span>{comment.body}</span>
+                        </Box>
+                      </Box>
+                      <Element
+                        name="secondInsideContainer"
+                        style={{
+                          marginBottom: "100px",
+                        }}
+                      ></Element>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={index}>
+                    <Box display="flex" className={classes.author}>
+                      <Box>
+                        <Avatar
+                          alt={comment.userHandle}
+                          src={comment.userImage}
+                        />
+                      </Box>
+                      <Box className="author__body">
+                        <NavLink
+                          to={`/profile/${comment.userHandle}`}
+                          className={`${classes.bold}`}
+                        >
+                          {`${comment.userHandle}`}
+                        </NavLink>
+                        <span>{comment.body}</span>
+                      </Box>
                     </Box>
-                    <Box className="author__body">
-                      <NavLink
-                        to={`/profile/${comment.userHandle}`}
-                        className={`${classes.bold}`}
-                      >
-                        {`${comment.userHandle}`}
-                      </NavLink>
-                      <span>{comment.body}</span>
-                    </Box>
-                  </Box>
-                </li>
-              );
-            })}
-            <li ref={messagesEndRef} >
-            </li>
-          </ul>
+                  </li>
+                );
+              })}
+            </ul>
+          </Element>
         </CardContent>
         <Divider />
 
@@ -377,7 +285,11 @@ function ScreamDetails(props) {
               <FavoriteBorderIcon className={classes.boldIcon} />
             )}
           </IconButton>
-          <IconButton disableFocusRipple disableRipple aria-label="comment">
+          <IconButton
+            disableFocusRipple
+            disableRipple
+            aria-label="comment"
+          >
             <ChatBubbleOutlineIcon className={classes.boldIcon} />
           </IconButton>
           <IconButton
@@ -412,10 +324,7 @@ function ScreamDetails(props) {
             onChange={handleChange}
             value={comment.body}
           />
-          <Button
-            type="submit"
-            classes={classes.postBtn}
-          >
+          <Button type="submit" classes={classes.postBtn}>
             Post
           </Button>
         </form>

@@ -11,6 +11,7 @@ import {
 } from "features/NewFeed/NewFeedSlice";
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
 import ScreamPost from "../ScreamPost";
+import { POST_COMMENT } from "features/Scream/ScreamSlice";
 
 ScreamList.propTypes = {
   screams: PropTypes.array,
@@ -88,8 +89,17 @@ function ScreamList(props) {
     formData.set("image", image, image.name);
   };
 
+  const handleCommentSubmit = (body, screamId) => {
+    if (authenticated) {
+      console.log("comment", body);
+      dispatch(POST_COMMENT({body, screamId}));
+    } else {
+      history.push("/login");
+    }
+  };
+
   return (
-    <Grid item className={`${classes.root}`} xs={7}>
+    <Grid item className={`${classes.root}`} xs={10} md={7}>
       <ScreamPost
         handleImageChange={handleImageChange}
         handlePost={handlePost}
@@ -99,6 +109,7 @@ function ScreamList(props) {
       {screams.map((scream, index) => {
         return (
           <ScreamCard
+            handleCommentSubmit={handleCommentSubmit}
             key={index}
             scream={scream}
             isLike={checkLike(scream)}

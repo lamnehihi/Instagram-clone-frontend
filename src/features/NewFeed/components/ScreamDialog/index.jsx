@@ -20,11 +20,13 @@ ScreamDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
+  handleGotoPost: PropTypes.func,
 };
 
 ScreamDialog.defaultProps = {
   authenticated: false,
   isMyScream: false,
+  handleGotoPost: null,
 };
 
 const useStyles = makeStyles({
@@ -48,7 +50,7 @@ const useStyles = makeStyles({
 
 function ScreamDialog(props) {
   const classes = useStyles();
-  const { authenticated, isMyScream, handleClick, open, handleDelete } = props;
+  const { authenticated, isMyScream, handleClick, open, handleDelete, handleGotoPost } = props;
   const history = useHistory();
 
   const handleClose = () => {
@@ -65,6 +67,12 @@ function ScreamDialog(props) {
   const handleDeleteClick = () => {
     if (handleDelete) {
       handleDelete();
+    }
+  };
+
+  const handleGotoPostClick = () => {
+    if (handleGotoPost) {
+      handleGotoPost();
     }
   };
 
@@ -90,7 +98,7 @@ function ScreamDialog(props) {
         </ListItem>
         <Divider />
 
-        <ListItem button onClick={handleClose}>
+        <ListItem button onClick={handleGotoPostClick}>
           <Typography>Go to post</Typography>
         </ListItem>
         <Divider />

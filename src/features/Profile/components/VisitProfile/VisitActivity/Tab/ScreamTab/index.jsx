@@ -9,6 +9,8 @@ import {
   GridListTile,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
+import useRandomImage from "hooks/useRandomImage.js";
+import ScreamBox from "components/ScreamBox";
 
 ScreamTab.propTypes = {
   index: PropTypes.any.isRequired,
@@ -51,6 +53,7 @@ function ScreamTab(props) {
   console.log("my scream", screams);
 
   const classes = useStyles();
+  const {indexPic} = useRandomImage();
 
   return (
     <div
@@ -66,7 +69,13 @@ function ScreamTab(props) {
           {screams.map((scream) => {
             return (
               <GridListTile key={scream.imageUrl} cols={scream.cols || 1}>
-                <img src={scream.imageUrl} alt={scream.body} />
+                <ScreamBox
+                    likeCount={scream.likeCount}
+                    commentCount={scream.commentCount}
+                    imageUrl={scream.imageUrl}
+                    body={scream.body}
+                    screamId={scream.id}
+                  />               
               </GridListTile>
             );
           })}

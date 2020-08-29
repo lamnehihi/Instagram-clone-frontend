@@ -8,10 +8,12 @@ import {
   Avatar,
   Button,
   TextField,
+  CircularProgress,
 } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import EditAvatar from "features/Profile/components/EditAvatar";
 import { EDIT_PROFILE } from "features/Profile/ProfileSlice";
+import { LOADING_UI } from "features/Auth/UiSlice";
 
 EditProfile.propTypes = {
   index: PropTypes.any.isRequired,
@@ -65,8 +67,16 @@ const useStyle = makeStyles((theme) => ({
     boxSizing: "border-box",
   },
   submit: {
-    backgroundColor: "#0095f6",
+    backgroundColor: "#42A6F7",
     color: "#fff",
+    fontWeight: "bold",
+    position: "relative",
+    marginBottom: "2rem",
+  },
+  loading: {
+    color: "#000",
+    position: "absolute",
+    top: "100%",
   },
 }));
 
@@ -84,7 +94,7 @@ function EditProfile(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("submit edit", user);
-
+    dispatch(LOADING_UI());
     dispatch(EDIT_PROFILE(user));
   };
 
@@ -112,7 +122,7 @@ function EditProfile(props) {
     }
   }, [credentials])
 
-  
+  const loading = useSelector(state => state.ui.loading);
   
   return (
     <div
@@ -233,7 +243,11 @@ New usernames for accounts that reach a lot of people might need to be reviewed.
               disabled={pure}
             >
               Submit
+              {loading && (
+                <CircularProgress size="2rem" className={classes.loading} />
+              )}
             </Button>
+            
           </form>
         </Box>
       )}

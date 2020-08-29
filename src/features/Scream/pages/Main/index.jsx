@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import screamApi from "api/screamApi";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Divider, Box } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { GET_SCREAM, LIKE, UNLIKE, POST_COMMENT } from "features/Scream/ScreamSlice";
@@ -12,6 +12,7 @@ import {
   SET_UNLIKE_SCREAM,
 } from "features/NewFeed/NewFeedSlice";
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
+import RelativeScreams from "features/Scream/components/RelativeScreams";
 
 Scream.propTypes = {};
 
@@ -71,12 +72,16 @@ function Scream(props) {
   return (
     <Container maxWidth="md">
       <Grid container justify="center">
+      <Box width="100%" display="flex" justifyContent="center" alignItems="center" flexDirection="column">
         <ScreamDetails
           handleCommentSubmit={handleCommentSubmit}
           scream={scream}
           handleLike={handleLike}
           isLike={checkLike(screamId)}
         />
+         <Divider style={{width: "100%"}} variant="middle" />
+        <RelativeScreams />
+        </Box>
       </Grid>
     </Container>
   );
