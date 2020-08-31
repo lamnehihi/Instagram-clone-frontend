@@ -52,9 +52,6 @@ function App() {
       dispatch(SET_LOGIN());
     }
   }
-  useEffect(() => {
-    dispatch(FLETCH_SCREAMS());
-  }, [])
   return (
     <div className="social-app">
     <ThemeProvider theme={theme}>

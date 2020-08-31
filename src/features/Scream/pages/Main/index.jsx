@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import screamApi from "api/screamApi";
 import { Container, Grid, Divider, Box } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";

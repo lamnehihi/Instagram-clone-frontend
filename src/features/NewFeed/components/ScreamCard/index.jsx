@@ -29,6 +29,7 @@ import { RandomBackGroundImage } from "assets/images/randomPics/randomPics";
 import { Link, NavLink, useHistory } from "react-router-dom";
 import { ScreamCardStyle } from "features/NewFeed/Style/ScreamCardStyle";
 import useRandomImage from "hooks/useRandomImage.js";
+import { add3Dots } from "publicFunction";
 
 
 
@@ -91,21 +92,7 @@ function ScreamCard(props) {
     isMyScream = true;
   }
 
-
   const {indexPic} = useRandomImage();
-  
-  function add3Dots(string, limit) {
-    var dots = "...";
-    const showMore = " Show more";
-    if(string) {
-      if (string.length > limit) {
-        // you can also use substr instead of substring
-        string = string.substring(0, limit) + dots + showMore;
-      }
-    }
-    return string;
-  }
-
 
   return (
     //<Slide direction="right" in={true} {...{timeout: 500}} style={{ transitionDelay: "200ms" }}>

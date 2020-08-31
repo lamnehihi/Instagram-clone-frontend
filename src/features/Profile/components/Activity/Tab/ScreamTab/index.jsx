@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   Box,
   Typography,
-  Grid,
   GridList,
   makeStyles,
   GridListTile,
@@ -70,9 +69,9 @@ function ScreamTab(props) {
     >
       {value === index && (
         <GridList cellHeight="auto" className={classess.gridList} cols={3}>
-          {screams.map((scream) => {
+          {screams.map((scream, index) => {
             return (
-              <GridListTile key={scream.imageUrl} cols={scream.cols || 1}>
+              <GridListTile key={index} cols={scream.cols || 1}>
                 <ScreamBox
                   likeCount={scream.likeCount}
                   commentCount={scream.commentCount}
@@ -103,7 +102,7 @@ function ScreamTab(props) {
             borderRadius="50%"
             {...defaultProps}
           >
-            <AppsIcon fontSize="" />
+            <AppsIcon />
           </Box>
           <Typography variant="h3">Upload a Post</Typography>
           <Typography>Post show your energy for a new day.</Typography>

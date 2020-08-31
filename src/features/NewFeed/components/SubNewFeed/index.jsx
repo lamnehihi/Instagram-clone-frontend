@@ -27,6 +27,10 @@ const useStyle = makeStyles((theme) => ({
     padding: "1rem 1rem 3rem 3rem",
     width: "100%",
     top: "100px",
+    "& a": {
+      color: "#262626",
+      textDecoration: "none",
+    },
     "& .MuiAvatar-root": {
       marginRight: "1rem",
     },
@@ -81,8 +85,8 @@ const useStyle = makeStyles((theme) => ({
   suggest: {
     "& .MuiButton-root": {
       color: "#0096F6",
-      fontSize: "12px",
-      fontWeight: 600,
+      fontSize: "10px",
+      fontWeight: 500,
       textTransform: "capitalize"
     }
   },
@@ -104,6 +108,7 @@ function SubNewFeed(props) {
     <Grid item xs={4} className={classes.relative}>
       <Box className={classes.root}>
         {credentials.handle ? (
+          <Link to={`/profile/${credentials.handle}`}>
           <Box className={`${classes.user} ${classes.section}`} display="flex">
             <Avatar
               alt={credentials.handle}
@@ -115,6 +120,7 @@ function SubNewFeed(props) {
               <Typography variant="h6">{credentials.email}</Typography>
             </Box>
           </Box>
+          </Link>
         ) : (
           <Box className={`${classes.section}`}>
             <Link to="/signup" underline="none">
@@ -129,13 +135,14 @@ function SubNewFeed(props) {
           flexDirection="column"
         >
           <Typography variant="h4">Hottest people</Typography>
-          {hottest.slice(0, 6).map((people) => {
+          {hottest.current.slice(0, 6).map((people,index) => {
             return (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
                 className={`${classes.userSuggest}`}
+                key={index}
               >
                 <Box display="flex" alignItems="center">
                   <Avatar src={people.avatar} alt={people.name} className={classes.small}/>

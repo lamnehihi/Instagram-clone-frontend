@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
   Box,
-  makeStyles,
   Avatar,
   Typography,
   Button,
@@ -38,7 +37,7 @@ function Bio(props) {
   };
   return (
     <Box className={classes.root} position="relative">
-      <Grid xs={4} className="avatar">
+      <Grid xs={4} item className="avatar">
         <Tooltip title="Edit Avatar" placement="top">
           <ButtonBase disableRipple onClick={handleImageClick}>
             <Avatar
@@ -51,7 +50,7 @@ function Bio(props) {
         </Tooltip>
         <EditAvatar />
       </Grid>
-      <Grid xs={8}>
+      <Grid xs={8} item>
         <Box
           display="flex"
           flexWrap="wrap"
@@ -60,7 +59,7 @@ function Bio(props) {
           position="relative"
         >
           <Typography variant="h2">{user.handle}</Typography>
-          <Grid xs={12} md={3}>
+          <Grid xs={12} md={3} item>
             <Button variant="outlined" onClick={handleOnClick}>
               Edit Profile
             </Button>

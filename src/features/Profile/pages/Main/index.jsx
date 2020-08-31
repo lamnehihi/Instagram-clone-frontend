@@ -10,10 +10,7 @@ About.propTypes = {};
 
 function About(props) {
   const {
-    authenticated,
     credentials,
-    likes,
-    notifications,
     screams,
   } = useSelector((state) => state.user);
   return (

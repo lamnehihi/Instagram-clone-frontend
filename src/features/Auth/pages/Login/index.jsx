@@ -11,7 +11,6 @@ import {
   Box,
   Link,
   Paper,
-  Container,
 } from "@material-ui/core";
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";

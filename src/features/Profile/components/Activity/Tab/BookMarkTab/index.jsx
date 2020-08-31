@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles, Box, Typography, Button } from "@material-ui/core";
+import { Box, Typography, Button } from "@material-ui/core";
 
 import BookmarkBorderRoundedIcon from "@material-ui/icons/BookmarkBorderRounded";
 import { defaultTableTabProps, tableTabStyle } from "features/Profile/Style/tableTabStyle";
@@ -33,7 +33,7 @@ function BookMarkTab(props) {
             borderRadius="50%"
             {...defaultProps}
           >
-            <BookmarkBorderRoundedIcon fontSize="" />
+            <BookmarkBorderRoundedIcon />
           </Box>
           <Typography variant="h3">Save</Typography>
           <Typography>

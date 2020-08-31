@@ -6,6 +6,7 @@ import SubNewFeed from "features/NewFeed/components/SubNewFeed";
 import ScreamList from "features/NewFeed/components/ScreamList";
 import { useSelector, useDispatch } from "react-redux";
 import { FLETCH_SCREAMS } from "features/NewFeed/NewFeedSlice";
+import { LOADING_NEW_FEED, LOADING_NEW_FEED_DONE } from "features/Auth/UiSlice";
 
 Main.propTypes = {};
 
@@ -16,7 +17,12 @@ function Main(props) {
 
 
   useEffect(() => {
+    dispatch(LOADING_NEW_FEED());
     dispatch(FLETCH_SCREAMS());
+    setTimeout(() => {
+      console.log("loading new feed done");
+      LOADING_NEW_FEED_DONE();
+    }, 4000);
   }, [])
 
   return (

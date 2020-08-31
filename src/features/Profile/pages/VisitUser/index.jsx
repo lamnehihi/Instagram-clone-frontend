@@ -1,8 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Container } from "@material-ui/core";
-import Bio from "features/Profile/components/Bio";
-import Activity from "features/Profile/components/Activity";
 import { useSelector, useDispatch } from "react-redux";
 import { GET_VISIT_USER } from "features/Profile/ProfileSlice";
 import { useParams, useHistory } from "react-router-dom";

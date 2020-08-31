@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Box,
-  Typography,
-  Grid,
   GridList,
   makeStyles,
   GridListTile,

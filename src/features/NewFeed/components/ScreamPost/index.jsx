@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import {
-  makeStyles,
   Box,
   Card,
   CardContent,
@@ -15,7 +14,6 @@ import {
   Divider,
 } from "@material-ui/core";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import { ScreamPostStyle } from "features/NewFeed/Style/ScreamPostStyle";
 import ActionDial from "./ActionDial";
@@ -65,7 +63,7 @@ function ScreamPost(props) {
       }
     }
   };
-  
+
   return authenticated === true ? (
     <Card elevation={12} className={classes.root}>
       <CardHeader
@@ -108,9 +106,9 @@ function ScreamPost(props) {
       </CardContent>
       <Divider />
       <CardActions>
-        <Box alignItems="center" width="-webkit-fill-available;" height="40px" position="relative">
+        <Box display="flex" minWidth="60%" justifyContent="space-between" alignItems="center" width="-webkit-fill-available;" height="40px" position="relative">
         <ActionDial handleAddImage={handleAddImage} />
-          {imageName === "none" ? "" : <Typography>{imageName}</Typography>}
+          {imageName === "none" ? "" : <Typography className={classes.imageName}>{imageName}</Typography>}
         </Box>
         <Button
           variant="contained"

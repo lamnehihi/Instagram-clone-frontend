@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { EDIT_AVATAR } from "features/Profile/ProfileSlice";
 import { useDispatch } from "react-redux";
 

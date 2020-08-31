@@ -30,3 +30,43 @@
     }
   }
 }
+
+.notification{ 
+  position: relative;
+}
+.notification::after {
+  background: #ed4956;
+  background: rgba(var(--c37,237,73,86),1);
+  border-radius: 2px;
+  bottom: -5px;
+  content: '';
+  height: 4px;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  -webkit-transition: bottom .2s ease-in-out;
+  transition: bottom .2s ease-in-out;
+  width: 4px;
+}
+
+.popup{
+  padding: .5rem;
+  border-radius: 8px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 62px;
+  left: 50%;
+  -webkit-transform: translateX(-50%) !important;
+  transform: translateX(-50%) !important;
+  -webkit-transition: top .2s ease-in-out;
+  transition: top .2s ease-in-out;
+  background-color: #ed4956 !important;
+  color: #fff !important;
+  > span {
+    fontSize: 23px;
+
+  }
+}

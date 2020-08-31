@@ -137,7 +137,7 @@ function EditProfile(props) {
         <Box className={classes.root} padding="3rem" width="100%">
           {/* Change Avatar */}
           <Grid container className={classes.avatar}>
-            <Grid sm={3} className={classes.aside}>
+            <Grid sm={3} item className={classes.aside}>
               <Avatar alt={user.handle} src={user.imageUrl} />
               <EditAvatar />
             </Grid>

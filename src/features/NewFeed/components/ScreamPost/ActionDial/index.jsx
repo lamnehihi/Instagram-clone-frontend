@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "translateZ(0px)",
     position: "absolute",
     height: "40px",
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       "& button": {
         height: "20px",
         width: "20px",
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       height: "40px",
       width: "40px",
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down("sm")]: {
         width: "30px",
       },
     },
@@ -45,10 +45,8 @@ ActionDial.defaultProps = {
 };
 
 const actions = [
-  { icon: <LoyaltyIcon />, name: "Tag" },
   { icon: <ImageIcon />, name: "Image" },
-  { icon: <RoomIcon />, name: "Check in" },
-  { icon: <EmojiEmotionsIcon />, name: "Emoji" },
+  { icon: <LoyaltyIcon />, name: "Tag" },
   { icon: <ShareIcon />, name: "Share" },
 ];
 
@@ -76,28 +74,28 @@ function ActionDial(props) {
   };
 
   return (
-      <SpeedDial
-        ariaLabel="SpeedDial openIcon example"
-        className={classes.root}
-        hidden={false}
-        icon={<SpeedDialIcon openIcon={<EditIcon />} />}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-        direction="right"
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={
-              action.name === "Image" ? handleAddImageOnClick : handleClose
-            }
-            tooltipPlacement="bottom-start"
-          />
-        ))}
-      </SpeedDial>
+    <SpeedDial
+      ariaLabel="SpeedDial openIcon example"
+      className={classes.root}
+      hidden={false}
+      icon={<SpeedDialIcon openIcon={<EditIcon />} />}
+      onClose={handleClose}
+      onOpen={handleOpen}
+      open={open}
+      direction="right"
+    >
+      {actions.map((action) => (
+        <SpeedDialAction
+          key={action.name}
+          icon={action.icon}
+          tooltipTitle={action.name}
+          onClick={
+            action.name === "Image" ? handleAddImageOnClick : handleClose
+          }
+          tooltipPlacement="bottom-start"
+        />
+      ))}
+    </SpeedDial>
   );
 }
 
