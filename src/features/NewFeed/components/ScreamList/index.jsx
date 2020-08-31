@@ -99,7 +99,7 @@ function ScreamList(props) {
   };
 
   return (
-    <Grid item className={`${classes.root}`} xs={10} md={7}>
+    <Grid item className={`${classes.root}`} xs={10} md={8}>
       <ScreamPost
         handleImageChange={handleImageChange}
         handlePost={handlePost}

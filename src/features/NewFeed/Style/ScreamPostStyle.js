@@ -27,9 +27,11 @@ export const ScreamPostStyle = makeStyles((theme) => ({
       "& button": {
         backgroundColor: "#fff",
         color: "#000",
-        height: "36px !important"
-      }
-    }
+        height: "36px !important",
+        boxShadow:
+          "0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)",
+      },
+    },
   },
   form: {
     marginLeft: ".5rem",
@@ -41,17 +43,17 @@ export const ScreamPostStyle = makeStyles((theme) => ({
     },
     "& .MuiInputBase-root": {
       height: "100%",
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:after": {
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:before": {
-      borderBottom: 'none'
-    }
+      borderBottom: "none",
+    },
   },
   body: {
     width: "100%",

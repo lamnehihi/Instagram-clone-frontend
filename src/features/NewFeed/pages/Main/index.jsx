@@ -12,7 +12,7 @@ Main.propTypes = {};
 function Main(props) {
   const screams = useSelector((state) => state.newFeed);
   const dispatch = useDispatch();
-  const {likes} = useSelector(state => state.user);
+  const {likes, credentials} = useSelector(state => state.user);
 
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function Main(props) {
       <Grid container justify="center">
         <ScreamList screams={screams} likes={likes}/>
         <Hidden smDown>
-          <SubNewFeed />
+          <SubNewFeed credentials={credentials}/>
         </Hidden>
       </Grid>
     </Container>

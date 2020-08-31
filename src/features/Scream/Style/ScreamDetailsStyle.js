@@ -5,6 +5,7 @@ export const ScreamDetailsStyle = makeStyles((theme) => ({
     display: "flex",
     width: "90%",
     marginBottom: "3rem",
+    overflow: "visible",
     [theme.breakpoints.down("sm")]: {
       display: "block",
       width: "80%",
@@ -24,10 +25,10 @@ export const ScreamDetailsStyle = makeStyles((theme) => ({
     "& .MuiIconButton-root:hover": {
       backgroundColor: "rgba(0, 0, 0,0)",
     },
-    "& .MuiIconButton-root": {
-      padding: "0rem .85rem 0rem .85rem",
-    },
     "& .MuiCardActions-root": {
+      "& .MuiIconButton-root": {
+        padding: "0rem .85rem 0rem .85rem",
+      },
       padding: ".85rem .65rem .3rem .65rem",
     },
   },
@@ -42,9 +43,10 @@ export const ScreamDetailsStyle = makeStyles((theme) => ({
   content: {
     flex: "1 0 auto",
     height: "300px",
-    overflowY: "scroll",
+    overflowY: "hidden",
+    boxSizing: "border-box",
     [theme.breakpoints.down("sm")]: {
-      height: "150px",
+      height: "250px",
       maxHeight: "250px",
     }
   },
@@ -60,6 +62,7 @@ export const ScreamDetailsStyle = makeStyles((theme) => ({
     },
   },
   noImage: {
+    overflow: "hidden",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       paddingTop: "0%",

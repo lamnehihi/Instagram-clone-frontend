@@ -13,6 +13,7 @@ import {
 } from "features/NewFeed/NewFeedSlice";
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
 import RelativeScreams from "features/Scream/components/RelativeScreams";
+import Footer from "components/Footer";
 
 Scream.propTypes = {};
 
@@ -25,10 +26,11 @@ function Scream(props) {
     (state) => state.user
   );
   const scream = useSelector((state) => state.scream);
+  const screams = useSelector((state) => state.newFeed);
 
   useEffect(() => {
     dispatch(GET_SCREAM(screamId));
-  }, []);
+  }, [screamId]);
   const checkLike = (screamId) => {
     const index = likes.findIndex((like) => {
       if (like.screamId === screamId) return like;
@@ -80,8 +82,10 @@ function Scream(props) {
           isLike={checkLike(screamId)}
         />
          <Divider style={{width: "100%"}} variant="middle" />
-        <RelativeScreams />
+        <RelativeScreams screams={screams} scream={scream}/>
         </Box>
+
+        <Footer />
       </Grid>
     </Container>
   );
