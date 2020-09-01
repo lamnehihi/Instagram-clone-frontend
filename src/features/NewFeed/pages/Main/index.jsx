@@ -15,16 +15,6 @@ function Main(props) {
   const dispatch = useDispatch();
   const {likes, credentials} = useSelector(state => state.user);
 
-
-  useEffect(() => {
-    dispatch(LOADING_NEW_FEED());
-    dispatch(FLETCH_SCREAMS());
-    setTimeout(() => {
-      console.log("loading new feed done");
-      LOADING_NEW_FEED_DONE();
-    }, 4000);
-  }, [])
-
   return (
     <Container maxWidth="md">
       <Grid container justify="center">

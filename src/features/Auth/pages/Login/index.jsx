@@ -17,6 +17,9 @@ import { useHistory } from "react-router-dom";
 import styleLogin from "features/Auth/Style/styleLogin";
 import { SET_AUTHENTICATED_LOGIN } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
+import firebase from 'firebase';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { uiConfig } from "App";
 
 const style = styleLogin;
 
@@ -49,11 +52,13 @@ function Login(props) {
 
   const userLogin = useSelector((state) => state.user);
   console.log("login");
+
+
   return (
     <div>
     <Grid container className={classes.root}>
       <Grid item sm>
-        <Paper item sm className={classes.box} elevation={15}>
+        <Paper className={classes.box} elevation={15}>
           <img
             src={appIcon}
             alt="instagram"
@@ -127,6 +132,7 @@ function Login(props) {
           >
             Log in with google
           </Link>
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
           <Link
             href="#"
             color="secondary"
@@ -136,7 +142,7 @@ function Login(props) {
             Forgot password?
           </Link>
         </Paper>
-        <Paper item sm className={classes.boxSignup} elevation={15}>
+        <Paper className={classes.boxSignup} elevation={15}>
           Don't have an account? 
           <Link href="/signup" color="secondary">
           Sign up

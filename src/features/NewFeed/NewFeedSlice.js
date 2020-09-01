@@ -46,10 +46,6 @@ export const FLETCH_SCREAMS = createAsyncThunk(
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
       const res = await Axios.get('/scream');
-      setTimeout(async() => {
-        thunkAPI.dispatch(LOADING_NEW_FEED_DONE());
-        ;
-      }, 5000);
       return res.data;
     } catch (error) {
       console.log("error", error.response.data);

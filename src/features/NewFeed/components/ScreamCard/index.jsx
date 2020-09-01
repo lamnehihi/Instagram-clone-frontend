@@ -30,8 +30,7 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import { ScreamCardStyle } from "features/NewFeed/Style/ScreamCardStyle";
 import useRandomImage from "hooks/useRandomImage.js";
 import { add3Dots } from "publicFunction";
-
-
+import Skeleton from "@material-ui/lab/Skeleton";
 
 ScreamCard.propTypes = {
   scream: PropTypes.object,
@@ -56,7 +55,7 @@ function ScreamCard(props) {
     likeCount,
     userHandle,
     userImage,
-    screamId
+    screamId,
   } = scream;
   const classes = ScreamCardStyle();
 
@@ -84,106 +83,134 @@ function ScreamCard(props) {
 
   const handleGotoPost = () => {
     setOpen(!open);
-    history.push(`/posts/${screamId}`)
-  }
+    history.push(`/posts/${screamId}`);
+  };
 
   let isMyScream = false;
   if (scream.userHandle === credentials.handle) {
     isMyScream = true;
   }
 
-  const {indexPic} = useRandomImage();
+  const { indexPic } = useRandomImage();
+  const { loadingNewFeed } = useSelector((state) => state.ui);
 
   return (
     //<Slide direction="right" in={true} {...{timeout: 500}} style={{ transitionDelay: "200ms" }}>
     <Card elevation={15} className={`${classes.root} card`}>
-      <CardHeader
-        avatar={<Avatar alt={userHandle} src={userImage} />}
-        action={
-          <IconButton aria-label="more-action" onClick={handleClickOpen}>
-            <MoreHorizIcon />
-            <ScreamDialog
-              isMyScream={isMyScream}
-              authenticated={authenticated}
-              open={open}
-              handleDelete={handleDelete}
-              handleClick={handleClickOpen}
-              handleGotoPost={handleGotoPost}
-            />
-          </IconButton>
-        }
-        title={
-          <Link to={`profile/${userHandle}`} className={`${classes.bold}`}>
-            {`${userHandle}`}
-          </Link>
-        }
-      />
-      {imageUrl ? (
-        <CardMedia
-          className={`${classes.media}`}
-          image={imageUrl}
-          title={body}
+      {loadingNewFeed ? (
+        <CardHeader
+          avatar={<Skeleton animation="wave" variant="circle" width={40} height={40} />}
+          title={<Skeleton animation="wave" width="30%" />}
         />
       ) : (
-        <Box
-          component="div"
-          className={`${classes.noImage}`}
-          position="relative"
-        >
-          <CardMedia
-            className={`${classes.media} ${classes.noImageChild}`}
-            title={body}
-            image={indexPic}
-          />
-          <Box component="span">
-            <Typography>{body}</Typography>
-          </Box>
+        <CardHeader
+          avatar={<Avatar alt={userHandle} src={userImage} />}
+          action={
+            <IconButton aria-label="more-action" onClick={handleClickOpen}>
+              <MoreHorizIcon />
+              <ScreamDialog
+                isMyScream={isMyScream}
+                authenticated={authenticated}
+                open={open}
+                handleDelete={handleDelete}
+                handleClick={handleClickOpen}
+                handleGotoPost={handleGotoPost}
+              />
+            </IconButton>
+          }
+          title={
+            <Link to={`profile/${userHandle}`} className={`${classes.bold}`}>
+              {`${userHandle}`}
+            </Link>
+          }
+        />
+      )}
+
+      {loadingNewFeed ? (
+          <Skeleton animation="wave" variant="rect" width="100%" height={400} />
+      ) : (
+        <Box>
+          {imageUrl ? (
+            <CardMedia
+              className={`${classes.media}`}
+              image={imageUrl}
+              title={body}
+            />
+          ) : (
+            <Box
+              component="div"
+              className={`${classes.noImage}`}
+              position="relative"
+            >
+              <CardMedia
+                className={`${classes.media} ${classes.noImageChild}`}
+                title={body}
+                image={indexPic}
+              />
+              <Box component="span">
+                <Typography>{body}</Typography>
+              </Box>
+            </Box>
+          )}
         </Box>
       )}
 
-      <Box>
-        <CardActions disableSpacing>
-          <IconButton aria-label="like" onClick={handleOnLike}>
-            {isLike ? (
-              <FavoriteIcon className={classes.bold} />
-            ) : (
-              <FavoriteBorderIcon className={classes.bold} />
-            )}
-          </IconButton>
-          <IconButton aria-label="comment" onClick={handleGotoPost}>
-            <ChatBubbleOutlineIcon className={classes.bold} />
-          </IconButton>
-          <IconButton className={classes.iconLeft} aria-label="bookmark">
-            <BookmarkBorderIcon className={classes.bold} />
-          </IconButton>
-        </CardActions>
+      {loadingNewFeed ? (
+        <Box padding="1rem 5rem">
+          <Skeleton animation="wave" height={18} style={{ marginBottom: 6 }} />
+          <Skeleton animation="wave" height={18} width="80%" />
+        </Box>
+      ) : (
+        <Box>
+          <CardActions disableSpacing>
+            <IconButton aria-label="like" onClick={handleOnLike}>
+              {isLike ? (
+                <FavoriteIcon className={classes.bold} />
+              ) : (
+                <FavoriteBorderIcon className={classes.bold} />
+              )}
+            </IconButton>
+            <IconButton aria-label="comment" onClick={handleGotoPost}>
+              <ChatBubbleOutlineIcon className={classes.bold} />
+            </IconButton>
+            <IconButton className={classes.iconLeft} aria-label="bookmark">
+              <BookmarkBorderIcon className={classes.bold} />
+            </IconButton>
+          </CardActions>
 
-        <CardContent className={`${classes.moveUp}`}>
-          <Typography className={`${classes.bold} ${classes.text}`}>
-            {`${likeCount} likes`}
-          </Typography>
-          <Box display="flex">
+          <CardContent className={`${classes.moveUp}`}>
             <Typography className={`${classes.bold} ${classes.text}`}>
-              {userHandle}
+              {`${likeCount} likes`}
             </Typography>
-            <Typography className={`${classes.text} ${classes.textBody}`}>
-              {add3Dots(body, 80)}
-            </Typography>
-          </Box>
-          {commentCount === 0 ? (
-            ""
-          ) : (
-            <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.grey}`}>
-              {`view all ${commentCount} comments`}
+            <Box display="flex">
+              <Typography className={`${classes.bold} ${classes.text}`}>
+                {userHandle}
+              </Typography>
+              <Typography className={`${classes.text} ${classes.textBody}`}>
+                {add3Dots(body, 80)}
+              </Typography>
+            </Box>
+            {commentCount === 0 ? (
+              ""
+            ) : (
+              <NavLink
+                to={`posts/${screamId}`}
+                className={`${classes.text} ${classes.grey}`}
+              >
+                {`view all ${commentCount} comments`}
+              </NavLink>
+            )}
+            <NavLink
+              to={`posts/${screamId}`}
+              className={`${classes.text} ${classes.time} ${classes.grey}`}
+            >
+              {dayjs(createAt).fromNow()}
             </NavLink>
-          )}
-        <NavLink to={`posts/${screamId}`} className={`${classes.text} ${classes.time} ${classes.grey}`}>
-          {dayjs(createAt).fromNow()}
-        </NavLink>
-        </CardContent>
-      </Box>
+          </CardContent>
+        </Box>
+      )}
     </Card>
-//</Slide>
+    //</Slide>
   );
 }
 

@@ -17,6 +17,7 @@ import {
   Grow,
   Paper,
   Typography,
+  LinearProgress,
 } from "@material-ui/core";
 
 import HomeIcon from "@material-ui/icons/Home";
@@ -40,8 +41,13 @@ import { SET_LOGOUT, MARK_NOTI_READ } from "features/Auth/UserSlice";
 import { NavBarStyle } from "./NavBarStyle";
 import dayjs from "dayjs";
 import { add3Dots } from "publicFunction";
+import PropTypes from "prop-types";
 
-NavBar.propTypes = {};
+NavBar.propTypes = {
+};
+
+NavBar.defaultProps = {
+};
 
 function NavBar(props) {
   useEffect(() => {
@@ -51,7 +57,9 @@ function NavBar(props) {
 
   const classes = NavBarStyle();
 
-  const { credentials: user, notifications, authenticated} = useSelector((state) => state.user);
+  const { credentials: user, notifications, authenticated } = useSelector(
+    (state) => state.user
+  );
 
   const showNoti = useSelector((state) => state.user.showNoti);
   let unRead = 0;
@@ -108,16 +116,18 @@ function NavBar(props) {
   };
 
   const handleClickNotification = (event) => {
-    if(authenticated){
-    event.preventDefault();
-    clickPrevious.current = clickAt;
-    setClickAt(3);
-    setAnchorElNotification(event.currentTarget);
-    const markNotiIds = notifications.filter(noti => !noti.read).map(noti => noti.id);
-    console.log("markNotiIds", markNotiIds);
-    dispatch(MARK_NOTI_READ(markNotiIds));
+    if (authenticated) {
+      event.preventDefault();
+      clickPrevious.current = clickAt;
+      setClickAt(3);
+      setAnchorElNotification(event.currentTarget);
+      const markNotiIds = notifications
+        .filter((noti) => !noti.read)
+        .map((noti) => noti.id);
+      console.log("markNotiIds", markNotiIds);
+      dispatch(MARK_NOTI_READ(markNotiIds));
     } else {
-    history.push("/login");
+      history.push("/login");
     }
   };
 
@@ -294,38 +304,44 @@ function NavBar(props) {
                   >
                     {notifications.map((noti, index) => {
                       return (
-                        <Link to={`/posts/${noti.screamId}`}>
-                        <MenuItem key={index} onClick={handleCloseNotification}>
-                          <Box width="100%" boxSizing="border-box">
-                            <Box
-                              width="100%"
-                              display="flex"
-                              justifyContent="space-between"
-                              alignItems="center"
-                              padding=".8rem 1rem"
-                              boxSizing="border-box"
-                            >
-                              <Box display="flex" alignItems="center">
-                                <Avatar
-                                  src={noti.senderImage}
-                                  alt={noti.sender}
-                                />
-                                <Typography variant="h5">
-                                  {noti.sender}
+                        <Link key={index} to={`/posts/${noti.screamId}`}>
+                          <MenuItem
+                            
+                            onClick={handleCloseNotification}
+                          >
+                            <Box width="100%" boxSizing="border-box">
+                              <Box
+                                width="100%"
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                padding=".8rem 1rem"
+                                boxSizing="border-box"
+                              >
+                                <Box display="flex" alignItems="center">
+                                  <Avatar
+                                    src={noti.senderImage}
+                                    alt={noti.sender}
+                                  />
+                                  <Typography variant="h5">
+                                    {noti.sender}
                                   </Typography>
                                   <Typography>
-                                  {noti.type === "like"
-                                    ? " liked your post."
-                                    : ` commented: ${add3Dots(noti.body, 50)}.`}
+                                    {noti.type === "like"
+                                      ? " liked your post."
+                                      : ` commented: ${add3Dots(
+                                          noti.body,
+                                          50
+                                        )}.`}
+                                  </Typography>
+                                </Box>
+                                <Typography style={{ color: "#8e8e8e" }}>
+                                  {dayjs(noti.createAt).fromNow()}
                                 </Typography>
                               </Box>
-                              <Typography style={{color: "#8e8e8e"}}>
-                                {dayjs(noti.createAt).fromNow()}
-                              </Typography>
+                              <Divider variant="fullWidth" />
                             </Box>
-                            <Divider variant="fullWidth"/>
-                          </Box>
-                        </MenuItem>
+                          </MenuItem>
                         </Link>
                       );
                     })}

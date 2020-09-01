@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
-import { LOADING_UI, SET_ERRORS, LOADING_DONE, LOADING_NEW_FEED } from "./UiSlice";
+import { LOADING_UI, SET_ERRORS, LOADING_DONE } from "./UiSlice";
 
 const initialState = {
   authenticated: false,
@@ -30,6 +30,7 @@ export const SET_AUTHENTICATED_LOGIN = createAsyncThunk(
     } catch (error) {
       console.log("error", error.response.data);
       dispatch(SET_ERRORS(error.response.data));
+      return
     }
     dispatch(SET_LOGIN());
     action.history.push("/");
@@ -40,6 +41,7 @@ export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk(
   "users/authenticated_signup",
   async (action, thunkApi) => {
     const userData = action.user;
+    console.log("user sign up", userData);
     const dispatch = thunkApi.dispatch;
     dispatch(LOADING_UI());
 
@@ -49,6 +51,7 @@ export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk(
     } catch (error) {
       console.log("error", error.response.data);
       dispatch(SET_ERRORS(error.response.data));
+      return
     }
     dispatch(SET_LOGIN());
     action.history.push("/");

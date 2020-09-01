@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, makeStyles, Box } from "@material-ui/core";
 import ScreamCard from "../ScreamCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -44,6 +44,7 @@ function ScreamList(props) {
   };
 
   const { authenticated, credentials } = useSelector((state) => state.user);
+
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -92,7 +93,7 @@ function ScreamList(props) {
   const handleCommentSubmit = (body, screamId) => {
     if (authenticated) {
       console.log("comment", body);
-      dispatch(POST_COMMENT({body, screamId}));
+      dispatch(POST_COMMENT({ body, screamId }));
     } else {
       history.push("/login");
     }

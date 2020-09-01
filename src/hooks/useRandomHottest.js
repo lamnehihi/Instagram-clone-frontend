@@ -8,7 +8,7 @@ function useRandomHottest() {
 
   useEffect(() => {
     randomHottest.current = hottestPeople.sort(() => 0.5 - Math.random());
-  }, []);
+  });
   const hottest = randomHottest;
   return {hottest};
 }

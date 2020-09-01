@@ -8,21 +8,16 @@ import VisitProfile from "features/Profile/components/VisitProfile";
 VisitUser.propTypes = {};
 
 function VisitUser(props) {
-  const { handle: handleId } = useParams();
   const {handle} = useSelector(state => state.user.credentials);
   const history = useHistory();
+  const { handle: handleId } = useParams();
 
-  console.log("Onwe", handle);
   if(handleId === handle) {
     history.push('/profile');
   }
-
-  console.log("handle", handleId);
   const dispatch = useDispatch();
   dispatch(GET_VISIT_USER(handleId));
 
-  
-  
   return (
     <VisitProfile />
   );

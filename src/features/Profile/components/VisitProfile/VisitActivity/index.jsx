@@ -78,7 +78,6 @@ function VisitActivity(props) {
         onChange={handleChange}
         aria-label="simple tabs example"
         centered
-        variant="scrollable"
         scrollButtons="off"
       >
         <Tab label="SCREAMS" icon={<AppsIcon fontSize="small" />} {...a11yProps(0)} />

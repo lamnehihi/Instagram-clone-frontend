@@ -10,8 +10,7 @@
   height: 33px !important;
 }
 
-.navbar{
-
+.navbar {
   &__logo {
     display: flex;
     align-items: center;
@@ -22,7 +21,7 @@
     align-items: center;
     > a {
       color: #000;
-      
+
       > svg {
         font-size: 30px;
         color: #000 !important;
@@ -31,27 +30,27 @@
   }
 }
 
-.notification{ 
+.notification {
   position: relative;
 }
 .notification::after {
   background: #ed4956;
-  background: rgba(var(--c37,237,73,86),1);
+  background: rgba(var(--c37, 237, 73, 86), 1);
   border-radius: 2px;
   bottom: -5px;
-  content: '';
+  content: "";
   height: 4px;
   left: 0;
   margin: 0 auto;
   position: absolute;
   right: 0;
-  -webkit-transition: bottom .2s ease-in-out;
-  transition: bottom .2s ease-in-out;
+  -webkit-transition: bottom 0.2s ease-in-out;
+  transition: bottom 0.2s ease-in-out;
   width: 4px;
 }
 
-.popup{
-  padding: .5rem;
+.popup {
+  padding: 0.5rem;
   border-radius: 8px !important;
   display: flex;
   justify-content: center;
@@ -61,12 +60,39 @@
   left: 50%;
   -webkit-transform: translateX(-50%) !important;
   transform: translateX(-50%) !important;
-  -webkit-transition: top .2s ease-in-out;
-  transition: top .2s ease-in-out;
+  -webkit-transition: top 0.2s ease-in-out;
+  transition: top 0.2s ease-in-out;
   background-color: #ed4956 !important;
   color: #fff !important;
   > span {
-    fontSize: 23px;
+    fontsize: 23px;
+  }
+}
+.MuiLinearProgress-barColorPrimary {
+  background: rgb(63, 106, 202);
+  background: linear-gradient(
+    125deg,
+    rgba(63, 106, 202, 1) 0%,
+    rgba(153, 59, 182, 1) 23%,
+    rgba(101, 235, 157, 1) 48%,
+    rgba(255, 213, 82, 1) 72%,
+    rgba(255, 95, 64, 1) 86%,
+    rgba(233, 9, 62, 1) 100%
+  );
+  background-size: 200%;
+  animation: bgAnimation 5s infinite;
+}
 
+@keyframes bgAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 50% 0%;
   }
 }

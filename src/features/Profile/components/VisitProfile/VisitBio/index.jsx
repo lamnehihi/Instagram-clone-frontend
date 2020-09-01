@@ -13,12 +13,16 @@ import {
 
 import { useHistory } from "react-router-dom";
 import { bioStyle } from "features/Profile/Style/bioStyle";
-
-
+import Skeleton from "@material-ui/lab/Skeleton";
 
 VisitBio.propTypes = {
-  user: PropTypes.object.isRequired,
-  screams: PropTypes.array.isRequired,
+  user: PropTypes.object,
+  screams: PropTypes.array,
+};
+
+VisitBio.defaultProps = {
+  user: {},
+  scream: [],
 };
 
 function VisitBio(props) {
@@ -26,19 +30,22 @@ function VisitBio(props) {
   const classes = bioStyle();
   const history = useHistory();
 
-
   return (
     <Box className={classes.root} position="relative">
       <Grid xs={4} className="avatar">
-      <Tooltip title="Avatar" placement="top">
-      <ButtonBase disableRipple >
-        <Avatar
-          alt={user.handle}
-          src={user.imageUrl}
-          className={classes.large}
-          variant="circle"
-        />
-        </ButtonBase>
+        <Tooltip title="Avatar" placement="top">
+          <ButtonBase disableRipple>
+            {user.imageUrl ? (
+              <Avatar
+                alt={user.handle}
+                src={user.imageUrl}
+                className={classes.large}
+                variant="circle"
+              />
+            ) : (
+              <Skeleton variant="circle" width={160} height={160} />
+            )}
+          </ButtonBase>
         </Tooltip>
       </Grid>
       <Grid xs={8}>
@@ -49,20 +56,40 @@ function VisitBio(props) {
           className={`${classes.section} header`}
           position="relative"
         >
-          <Typography variant="h2">{user.handle}</Typography>
-          <Grid xs={12} md={3}>
-          </Grid>
+          <Typography variant="h2">
+            {user.handle ? user.handle : <Skeleton width={260} />}
+          </Typography>
+          <Grid xs={12} md={3}></Grid>
         </Box>
 
         <Hidden smDown>
-        <Typography className={`${classes.section} ${classes.post}`}><span>{`${screams.length}`}</span>posts</Typography>
+          {user.handle ? (
+            <Typography className={`${classes.section} ${classes.post}`}>
+              <span>{`${screams.length}`}</span>posts
+            </Typography>
+          ) : (
+            <Typography>
+            <Skeleton width={160} />
+            </Typography>
+          )}
         </Hidden>
-        <Box className={`${classes.section} bio`}>
-          <Typography variant="h1">{user.email}</Typography>
-          {user.location ? <Typography>{user.location}</Typography> : ""}
-          {user.bio ? <Typography>{user.bio}</Typography> : ""}
-          {user.website ? <Link href={user.website}>{user.website}</Link> : ""}
-        </Box>
+        {user.handle ? (
+          <Box className={`${classes.section} bio`}>
+            <Typography variant="h1">{user.email}</Typography>
+            {user.location ? <Typography>{user.location}</Typography> : ""}
+            {user.bio ? <Typography>{user.bio}</Typography> : ""}
+            {user.website ? (
+              <Link href={user.website}>{user.website}</Link>
+            ) : (
+              ""
+            )}
+          </Box>
+        ) : (
+          <Box className={`${classes.section} bio`}>
+            <Typography><Skeleton width={160} /></Typography>
+            <Typography><Skeleton width={160} /></Typography>
+          </Box>
+        )}
       </Grid>
     </Box>
   );
