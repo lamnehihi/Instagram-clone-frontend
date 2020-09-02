@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {
@@ -13,8 +13,12 @@ import {
   Menu,
   MenuItem,
   Divider,
+  Badge,
+  Grow,
+  Paper,
+  Typography,
+  LinearProgress,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 
 import HomeIcon from "@material-ui/icons/Home";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
@@ -22,6 +26,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import ExploreIcon from "@material-ui/icons/Explore";
 import ExploreOutlinedIcon from "@material-ui/icons/ExploreOutlined";
+import ChatBubbleRoundedIcon from "@material-ui/icons/ChatBubbleRounded";
 
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
@@ -32,55 +37,17 @@ import { Link as RouterLink, BrowserRouter } from "react-router-dom";
 import "./NavBar.scss";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_LOGOUT } from "features/Auth/UserSlice";
+import { SET_LOGOUT, MARK_NOTI_READ } from "features/Auth/UserSlice";
+import { NavBarStyle } from "./NavBarStyle";
+import dayjs from "dayjs";
+import { add3Dots } from "publicFunction";
+import PropTypes from "prop-types";
 
-NavBar.propTypes = {};
+NavBar.propTypes = {
+};
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-  submenu: {
-    top: "40px !important",
-
-    "& .MuiMenuItem-root": {
-      width: "170px",
-    },
-    "& .MuiSvgIcon-root": {
-      marginRight: ".7rem",
-    },
-    "& .MuiMenu-list": {
-      padding: "0rem",
-    },
-    "& a": {
-      color: "#262626",
-      textDecoration: "none",
-    },
-  },
-  relative: {
-    display: "relative",
-  },
-  black: {
-    color: "#262626 !important",
-    "& svg": {
-      color: "#262626 !important",
-    },
-    "& .MuiButtonBase-root": {
-      margin: "0rem .7rem",
-    },
-  },
-}));
+NavBar.defaultProps = {
+};
 
 function NavBar(props) {
   useEffect(() => {
@@ -88,47 +55,89 @@ function NavBar(props) {
     return console.log("navbar unmount");
   }, []);
 
-  const classes = useStyles();
-  const user = useSelector((state) => state.user.credentials);
+  const classes = NavBarStyle();
+
+  const { credentials: user, notifications, authenticated } = useSelector(
+    (state) => state.user
+  );
+
+  const showNoti = useSelector((state) => state.user.showNoti);
+  let unRead = 0;
+  let notiLike = 0;
+  let notiComment = 0;
+  notifications.map((noti) => {
+    if (noti.read === false) {
+      ++unRead;
+    }
+    if (noti.type === "like") ++notiLike;
+    if (noti.type === "comments") ++notiComment;
+  });
+
   const dispatch = useDispatch();
+  let checked = false;
+  if (user.handle) {
+    checked = true;
+  }
+
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElNotification, setAnchorElNotification] = React.useState(null);
 
   //0-post 1-home 2-explore 3-noti 4-profile
   const [clickAt, setClickAt] = useState(1);
+  const clickPrevious = useRef(-1);
 
   const handleMenuItemClick = (number) => {
     switch (number) {
       case 1:
-        setClickAt(1)
+        setClickAt(1);
         break;
       case 2:
-        setClickAt(2)
-        break;
-      case 3:
-        setClickAt(3)
+        setClickAt(2);
         break;
       default:
-        setClickAt(1)
+        setClickAt(1);
         break;
     }
   };
 
   const handleClick = (event) => {
     event.preventDefault();
-    setClickAt(4)
-    console.log("object");
+    clickPrevious.current = clickAt;
+    setClickAt(4);
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    console.log("object aaa");
+    console.log("click pre:", clickPrevious.current);
     setAnchorEl(null);
+    setClickAt(clickPrevious.current);
+  };
+
+  const handleClickNotification = (event) => {
+    if (authenticated) {
+      event.preventDefault();
+      clickPrevious.current = clickAt;
+      setClickAt(3);
+      setAnchorElNotification(event.currentTarget);
+      const markNotiIds = notifications
+        .filter((noti) => !noti.read)
+        .map((noti) => noti.id);
+      console.log("markNotiIds", markNotiIds);
+      dispatch(MARK_NOTI_READ(markNotiIds));
+    } else {
+      history.push("/login");
+    }
+  };
+
+  const handleCloseNotification = () => {
+    console.log("click pre:", clickPrevious.current);
+    setAnchorElNotification(null);
+    setClickAt(clickPrevious.current);
   };
 
   const handleLoginClick = () => {
-    // window.location.href = "/login";
     history.push("/login");
   };
 
@@ -145,7 +154,31 @@ function NavBar(props) {
 
   const handleSetting = () => {
     setAnchorEl(null);
+    setClickAt(clickPrevious.current);
   };
+
+  var relativeTime = require("dayjs/plugin/relativeTime");
+  var updateLocale = require("dayjs/plugin/updateLocale");
+  dayjs.extend(relativeTime);
+  dayjs.extend(updateLocale);
+
+  dayjs.updateLocale("en", {
+    relativeTime: {
+      future: "in %s",
+      past: "%s",
+      s: "just now",
+      m: "%dmin",
+      mm: "%dmin",
+      h: "%dh",
+      hh: "%dh",
+      d: "%dd",
+      dd: "%dd",
+      M: "%dm",
+      MM: "%dm",
+      y: "%dy",
+      yy: "%dy",
+    },
+  });
 
   return (
     <div>
@@ -157,7 +190,7 @@ function NavBar(props) {
               direction="row"
               justify="space-between"
               alignItems="center"
-              maxWidth="sm"
+              maxwidth="sm"
             >
               <Box className="navbar__logo" component={Link} to="/">
                 <img
@@ -208,23 +241,131 @@ function NavBar(props) {
                     )}
                   </Box>
                 </ButtonBase>
-                <ButtonBase
-                  disableRipple
-                  onClick={() => handleMenuItemClick(3)}
-                >
-                  <Box className="navbar__menu__item" component={Link} to="/">
+
+                {/* ANCHOR: Handle click notification */}
+                <ButtonBase disableRipple onClick={handleClickNotification}>
+                  <Box
+                    className={`navbar__menu__item ${
+                      unRead > 0 && "notification"
+                    }`}
+                    component={Link}
+                    to="#"
+                  >
                     {clickAt === 3 ? (
                       <FavoriteIcon fontSize="large" />
                     ) : (
                       <FavoriteBorderOutlinedIcon fontSize="large" />
                     )}
                   </Box>
+                  {unRead > 0 && (
+                    <Grow
+                      in={checked && showNoti}
+                      style={{ transformOrigin: "0 0 0" }}
+                      {...(checked ? { timeout: 2000 } : {})}
+                    >
+                      <Paper elevation={10} className="popup">
+                        {notiLike > 0 && (
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            style={{ marginRight: ".5rem" }}
+                          >
+                            <FavoriteIcon
+                              style={{ fontSize: 25, color: "#ffffff" }}
+                            />
+                            <span style={{ fontSize: 18, fontWeight: 500 }}>
+                              {notiLike}
+                            </span>
+                          </Box>
+                        )}
+
+                        {notiComment > 0 && (
+                          <Box display="flex" alignItems="center">
+                            <ChatBubbleRoundedIcon
+                              style={{ fontSize: 23, color: "#ffffff" }}
+                            />
+                            <span style={{ fontSize: 18, fontWeight: 500 }}>
+                              {notiComment}
+                            </span>
+                          </Box>
+                        )}
+                      </Paper>
+                    </Grow>
+                  )}
                 </ButtonBase>
+                {notifications.length > 0 ? (
+                  <Menu
+                    id="simple-menu2"
+                    anchorEl={anchorElNotification}
+                    keepMounted
+                    open={Boolean(anchorElNotification)}
+                    onClose={handleCloseNotification}
+                    className={classes.submenuNotification}
+                  >
+                    {notifications.map((noti, index) => {
+                      return (
+                        <Link key={index} to={`/posts/${noti.screamId}`}>
+                          <MenuItem
+                            
+                            onClick={handleCloseNotification}
+                          >
+                            <Box width="100%" boxSizing="border-box">
+                              <Box
+                                width="100%"
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                padding=".8rem 1rem"
+                                boxSizing="border-box"
+                              >
+                                <Box display="flex" alignItems="center">
+                                  <Avatar
+                                    src={noti.senderImage}
+                                    alt={noti.sender}
+                                  />
+                                  <Typography variant="h5">
+                                    {noti.sender}
+                                  </Typography>
+                                  <Typography>
+                                    {noti.type === "like"
+                                      ? " liked your post."
+                                      : ` commented: ${add3Dots(
+                                          noti.body,
+                                          50
+                                        )}.`}
+                                  </Typography>
+                                </Box>
+                                <Typography style={{ color: "#8e8e8e" }}>
+                                  {dayjs(noti.createAt).fromNow()}
+                                </Typography>
+                              </Box>
+                              <Divider variant="fullWidth" />
+                            </Box>
+                          </MenuItem>
+                        </Link>
+                      );
+                    })}
+                  </Menu>
+                ) : (
+                  <Menu
+                    id="simple-menu2"
+                    anchorEl={anchorElNotification}
+                    keepMounted
+                    open={Boolean(anchorElNotification)}
+                    onClose={handleCloseNotification}
+                    className={classes.submenuNotification}
+                  >
+                    <Box>No noti</Box>
+                  </Menu>
+                )}
+
+                {/* ANCHOR: Handle click avatar */}
                 {user.imageUrl ? (
                   <Box
                     className="navbar__menu__item"
                     id="avatar"
                     component={Link}
+                    to="#"
                   >
                     <IconButton
                       className={`${classes.small} ${classes.avatar}`}

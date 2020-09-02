@@ -3,16 +3,20 @@ import PropTypes from "prop-types";
 import {
   Box,
   Typography,
-  Grid,
   GridList,
   makeStyles,
   GridListTile,
   Button,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { tableTabStyle, defaultTableTabProps } from "features/Profile/Style/tableTabStyle";
+import {
+  tableTabStyle,
+  defaultTableTabProps,
+} from "features/Profile/Style/tableTabStyle";
 
 import AppsIcon from "@material-ui/icons/Apps";
+import useRandomImage from "hooks/useRandomImage.js";
+import ScreamBox from "components/ScreamBox";
 
 ScreamTab.propTypes = {
   index: PropTypes.any.isRequired,
@@ -33,17 +37,11 @@ const useStyles = makeStyles((theme) => ({
       height: "fit-content",
     },
     "& .MuiGridListTile-root": {
-      height: "300px !important",
-      "& img": {
-        objectFit: "cover",
-      },
+      
     },
     [theme.breakpoints.down("sm")]: {
       "& .MuiGridListTile-root": {
-        height: "150px !important",
-        "& img": {
-          objectFit: "cover",
-        },
+        
       },
     },
   },
@@ -57,8 +55,8 @@ function ScreamTab(props) {
   const classess = useStyles();
   const classes = tableTabStyle();
 
-const defaultProps = defaultTableTabProps;
-
+  const defaultProps = defaultTableTabProps;
+  const { indexPic } = useRandomImage();
 
   return screams.length > 0 ? (
     <div
@@ -71,10 +69,16 @@ const defaultProps = defaultTableTabProps;
     >
       {value === index && (
         <GridList cellHeight="auto" className={classess.gridList} cols={3}>
-          {screams.map((scream) => {
+          {screams.map((scream, index) => {
             return (
-              <GridListTile key={scream.imageUrl} cols={scream.cols || 1}>
-                <img src={scream.imageUrl} alt={scream.body} />
+              <GridListTile key={index} cols={scream.cols || 1}>
+                <ScreamBox
+                  likeCount={scream.likeCount}
+                  commentCount={scream.commentCount}
+                  imageUrl={scream.imageUrl}
+                  body={scream.body}
+                  screamId={scream.id}
+                />
               </GridListTile>
             );
           })}
@@ -98,7 +102,7 @@ const defaultProps = defaultTableTabProps;
             borderRadius="50%"
             {...defaultProps}
           >
-            <AppsIcon fontSize="" />
+            <AppsIcon />
           </Box>
           <Typography variant="h3">Upload a Post</Typography>
           <Typography>Post show your energy for a new day.</Typography>

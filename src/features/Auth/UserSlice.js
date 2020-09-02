@@ -8,6 +8,7 @@ const initialState = {
   likes: [],
   notifications: [],
   screams: [],
+  showNoti: true,
 };
 
 export const setAuthorizationHeader = (token) => {
@@ -29,9 +30,10 @@ export const SET_AUTHENTICATED_LOGIN = createAsyncThunk(
     } catch (error) {
       console.log("error", error.response.data);
       dispatch(SET_ERRORS(error.response.data));
+      return
     }
     dispatch(SET_LOGIN());
-    action.history.push('/');
+    action.history.push("/");
   }
 );
 
@@ -39,6 +41,7 @@ export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk(
   "users/authenticated_signup",
   async (action, thunkApi) => {
     const userData = action.user;
+    console.log("user sign up", userData);
     const dispatch = thunkApi.dispatch;
     dispatch(LOADING_UI());
 
@@ -48,9 +51,31 @@ export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk(
     } catch (error) {
       console.log("error", error.response.data);
       dispatch(SET_ERRORS(error.response.data));
+      return
     }
     dispatch(SET_LOGIN());
-    action.history.push('/');
+    action.history.push("/");
+  }
+);
+
+export const SET_AUTHENTICATED_SIGNUP_OAUTH = createAsyncThunk(
+  "users/authenticated_signupOAuth",
+  async (action, thunkApi) => {
+    const userData = action.user;
+    console.log("user sign up OAuth", userData);
+    const dispatch = thunkApi.dispatch;
+    dispatch(LOADING_UI());
+
+    try {
+      const res = await Axios.post("auth/signupoauth", userData);
+      setAuthorizationHeader(userData.token);
+    } catch (error) {
+      console.log("error", error.response.data);
+      dispatch(SET_ERRORS(error.response.data));
+      return
+    }
+    dispatch(SET_LOGIN());
+    action.history.push("/");
   }
 );
 
@@ -58,7 +83,7 @@ export const SET_LOGOUT = createAsyncThunk(
   "users/set_logout",
   async (action, thunkApi) => {
     const dispatch = thunkApi.dispatch;
-    console.log("set logout")
+    console.log("set logout");
     dispatch(SET_UNAUTHENTICATED());
     localStorage.removeItem("FBIdToken");
     delete Axios.defaults.headers.common["Authorization"];
@@ -69,11 +94,23 @@ export const SET_LOGOUT = createAsyncThunk(
 export const SET_LOGIN = createAsyncThunk(
   "users/set_login",
   async (action, thunkApi) => {
-    console.log("set login")
+    console.log("set login");
     const dispatch = thunkApi.dispatch;
     const res = await Axios.get("/user");
-    dispatch(SET_USER(res.data));
     dispatch(LOADING_DONE());
+    setTimeout(() => {
+      dispatch(TURN_OFF_NOTI());
+    }, 9000);
+    return(res.data);
+  }
+);
+
+//set user info
+export const MARK_NOTI_READ = createAsyncThunk(
+  "users/set_noti_read",
+  async (action, thunkApi) => {
+    const res = await Axios.post("/user/notifications", action);
+    return action;
   }
 );
 
@@ -97,17 +134,40 @@ const user = createSlice({
       const screamId = action.payload;
       return {
         ...state,
-        likes: state.likes.filter(like => like.screamId !== screamId),
+        likes: state.likes.filter((like) => like.screamId !== screamId),
+      };
+    },
+    TURN_OFF_NOTI: (state, action) => {
+      return {
+        ...state,
+        showNoti: false,
       }
+    },
+    ADD_USER_SCREAM: (state, action) => {
+      state.screams.push(action.payload);
     }
   },
   extraReducers: {
     [SET_LOGIN.fulfilled]: (state, action) => {
-      state.authenticated = true;
+      return {
+        ...state,
+        ...action.payload,
+        authenticated : true,
+      };
     },
+    [MARK_NOTI_READ.fulfilled]: (state, action) => {
+      state.notifications.forEach(noti => noti.read = true);
+    }
   },
 });
 
 const { reducer, actions } = user;
-export const { SET_USER, SET_UNAUTHENTICATED, SET_LIKE_USER, SET_UNLIKE_USER } = actions;
+export const {
+  SET_USER,
+  SET_UNAUTHENTICATED,
+  SET_LIKE_USER,
+  SET_UNLIKE_USER,
+  TURN_OFF_NOTI,
+  ADD_USER_SCREAM
+} = actions;
 export default reducer;

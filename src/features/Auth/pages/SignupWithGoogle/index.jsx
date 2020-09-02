@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Grid,
@@ -7,7 +7,6 @@ import {
   Button,
   Typography,
   CircularProgress,
-  Divider,
   Box,
   Link,
   Paper,
@@ -15,32 +14,42 @@ import {
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
 import styleSignup from "features/Auth/Style/styleSignup";
-import { SET_AUTHENTICATED_SIGNUP } from "features/Auth/UserSlice";
+import {
+  SET_AUTHENTICATED_SIGNUP_OAUTH,
+  setAuthorizationHeader,
+  SET_LOGIN,
+} from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { StyledFirebaseAuth } from "react-firebaseui";
-import { uiConfig } from "App";
-import firebase from 'firebase';
+import firebase from "firebase";
+import Axios from "axios";
+
+SignupWithGoogle.propTypes = {};
 
 const style = styleSignup;
 
-function Signup(props) {
+function SignupWithGoogle(props) {
   const classes = style();
   const [user, setUser] = useState({
     email: "",
     handle: "",
     password: "",
     confirmPassword: "",
+    userId: "",
+    imageUrl: "",
+    token: "",
+    isPure: true,
   });
-  const loading = useSelector(state => state.ui.loading);
-  const error = useSelector(state => state.ui.errors);
+
+  const loading = useSelector((state) => state.ui.loading);
+  const error = useSelector((state) => state.ui.errors);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("submit signup");
+    console.log("submit signup google");
 
-    const action = SET_AUTHENTICATED_SIGNUP({user, history});
+    const action = SET_AUTHENTICATED_SIGNUP_OAUTH({ user, history });
     dispatch(action);
   };
 
@@ -48,11 +57,59 @@ function Signup(props) {
     setUser({
       ...user,
       [event.target.name]: event.target.value,
+      isPure: false,
     });
   };
 
-  const userSignUp = useSelector((state) => state.user);
-  console.log("sign up");
+  //hadle auth firebase state change
+  useEffect(() => {
+    const unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged(async (userGmail) => {
+        if (!userGmail) {
+          //userGmail logout, handle something here
+          console.log("logout");
+          return;
+        }
+        console.log("login with google", { ...userGmail });
+        const gmailhandle = userGmail.displayName;
+        const gmail = userGmail.email;
+        const gmailId = userGmail.uid;
+
+        // Check handle of this Gmail.
+        //.if it already have this handle -> set token and login.
+        //.if not, -> update more data and create user for login.
+        try {
+          const gmailToken = await userGmail.getIdToken();
+          console.log("token gmail", gmailToken);
+          if (gmailToken) {
+            setUser({
+              ...user,
+              token: gmailToken,
+              handle: gmailhandle,
+              email: gmail,
+              userId: gmailId,
+              imageUrl: userGmail.photoURL,
+            });
+          }
+          console.log("user", user);
+
+          setAuthorizationHeader(gmailToken);
+          Axios.defaults.baseURL =
+            "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
+          const res = await Axios.get(`auth/checkoauth`);
+          if(res.data) {
+            dispatch(SET_LOGIN());
+            history.push('/');
+          }
+        } catch (error) {
+          console.log("handle update more data");
+          localStorage.removeItem("FBIdToken");
+          delete Axios.defaults.headers.common["Authorization"];
+        }
+      });
+    return () => unregisterAuthObserver();
+  }, []);
 
   return (
     <div>
@@ -67,18 +124,20 @@ function Signup(props) {
               className={classes.logo}
             />
 
-<StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-
+            <Typography
+              color="secondary"
+              display="block"
+              className={classes.bold}
+            >
+              Please filled out to continues
+            </Typography>
             <Box
+              marginTop=".5rem"
               display="flex"
               position="relative"
               justifyContent="space-between"
               alignItems="center"
-            >
-              <Divider className={classes.divider} variant="middle" />
-              <Typography className={classes.subdDivider}>OR</Typography>
-              <Divider className={classes.divider} variant="middle" />
-            </Box>
+            ></Box>
             <form noValidate onSubmit={handleSubmit} className={classes.form}>
               <TextField
                 name="email"
@@ -92,6 +151,21 @@ function Signup(props) {
                 variant="outlined"
                 helperText={error.email}
                 error={error.email ? true : false}
+                size="small"
+                disabled={true}
+              />
+              <TextField
+                name="handle"
+                id="handle"
+                label="Username"
+                color="secondary"
+                type="text"
+                className={classes.textField}
+                value={user.handle}
+                onChange={handleChange}
+                variant="outlined"
+                helperText={error.handle}
+                error={error.handle ? true : false}
                 size="small"
               />
               <TextField
@@ -122,22 +196,9 @@ function Signup(props) {
                 error={error.password ? true : false}
                 size="small"
               />
-              <TextField
-                name="handle"
-                id="handle"
-                label="Username"
-                color="secondary"
-                type="text"
-                className={classes.textField}
-                value={user.handle}
-                onChange={handleChange}
-                variant="outlined"
-                helperText={error.handle}
-                error={error.handle ? true : false}
-                size="small"
-              />
+
               <Button
-                disabled={loading}
+                disabled={loading || user.isPure}
                 type="submit"
                 color="primary"
                 variant="contained"
@@ -172,4 +233,4 @@ function Signup(props) {
   );
 }
 
-export default withStyles(style)(Signup);
+export default withStyles(style)(SignupWithGoogle);

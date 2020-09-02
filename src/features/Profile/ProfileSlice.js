@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { SET_LOGIN } from "features/Auth/UserSlice";
-import { SET_ERRORS } from "features/Auth/UiSlice";
+import { SET_ERRORS, LOADING_DONE } from "features/Auth/UiSlice";
 
 const { createAsyncThunk, createSlice } = require("@reduxjs/toolkit");
 
@@ -27,10 +27,10 @@ export const EDIT_AVATAR = createAsyncThunk(
 
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
-      //await Axios.post("user/uploadImg", formData);
+      await Axios.post("user/uploadImg", formData);
       console.log("form data", formData);
       const { dispatch } = thunkAPI;
-      //dispatch(SET_LOGIN());
+      dispatch(SET_LOGIN());
     } catch (error) {
       console.log(error);
     }
@@ -48,9 +48,12 @@ export const EDIT_PROFILE = createAsyncThunk(
 
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
-      const res = await Axios.post("user/", userData);
+      const res = await Axios.post("user", userData);
       const { dispatch } = thunkAPI;
       dispatch(SET_LOGIN());
+      setTimeout(() => {
+      dispatch(LOADING_DONE());
+      }, 700);
     } catch (error) {
       console.log("error", error.response.data);
       thunkAPI.dispatch(SET_ERRORS(error.response.data));

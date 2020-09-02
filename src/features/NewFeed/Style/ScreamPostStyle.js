@@ -24,18 +24,14 @@ export const ScreamPostStyle = makeStyles((theme) => ({
     "& .MuiCardActions-root": {
       display: "flex",
       justifyContent: "space-between",
-    }
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
+      "& button": {
+        backgroundColor: "#fff",
+        color: "#000",
+        height: "36px !important",
+        boxShadow:
+          "0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)",
+      },
+    },
   },
   form: {
     marginLeft: ".5rem",
@@ -47,17 +43,17 @@ export const ScreamPostStyle = makeStyles((theme) => ({
     },
     "& .MuiInputBase-root": {
       height: "100%",
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:after": {
-      borderBottom: 'none'
+      borderBottom: "none",
     },
     "& .MuiInput-underline:before": {
-      borderBottom: 'none'
-    }
+      borderBottom: "none",
+    },
   },
   body: {
     width: "100%",
@@ -67,4 +63,8 @@ export const ScreamPostStyle = makeStyles((theme) => ({
     width: theme.spacing(7),
     height: theme.spacing(7),
   },
+  imageName: {
+    width: "100%",
+    textAlign: "end",
+  }
 }));

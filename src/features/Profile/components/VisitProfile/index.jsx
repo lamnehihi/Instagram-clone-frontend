@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Container } from '@material-ui/core';
 import VisitBio from './VisitBio';
 import VisitActivity from './VisitActivity';

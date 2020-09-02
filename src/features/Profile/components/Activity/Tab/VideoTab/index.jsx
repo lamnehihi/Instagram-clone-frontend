@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, Box, Typography, Button } from '@material-ui/core';
+import { Box, Typography, Button } from '@material-ui/core';
 
 import LiveTvRoundedIcon from '@material-ui/icons/LiveTvRounded';
 import { defaultTableTabProps, tableTabStyle } from 'features/Profile/Style/tableTabStyle';
@@ -27,7 +27,7 @@ function VideoTab(props) {
       {value === index && (
         <div className={classes.root}>
         <Box  display="flex" justifyContent="center" alignItems="center" borderRadius="50%" {...defaultProps}>
-        <LiveTvRoundedIcon fontSize="" />
+        <LiveTvRoundedIcon />
         </Box>
         <Typography variant="h3">
         Upload a Video

@@ -52,7 +52,7 @@ export const bioStyle = makeStyles((theme) => ({
       "& .MuiIconButton-root": {
         position: 'absolute',
         right: "0%",
-        top: '2.8%'
+        top: '-30.8%'
       },
       "& .header" : {
         height : "150px",

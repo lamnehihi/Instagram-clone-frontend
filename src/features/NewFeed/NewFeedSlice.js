@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { useEffect } from "react";
-import screamApi from "api/screamApi";
 import Axios from "axios";
 import { SET_ERRORS } from "features/Auth/UiSlice";
-import { SET_LOGIN } from "features/Auth/UserSlice";
+import { ADD_USER_SCREAM } from "features/Auth/UserSlice";
+
 
 const initialScreams = [];
 
@@ -49,7 +48,7 @@ export const FLETCH_SCREAMS = createAsyncThunk(
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
       const res = await Axios.get('/scream');
-      thunkAPI.dispatch(FLETCH(res.data));
+      return res.data;
     } catch (error) {
       console.log("error", error.response.data);
       thunkAPI.dispatch(SET_ERRORS(error.response.data));
@@ -89,6 +88,7 @@ export const POST_SCREAM = createAsyncThunk(
       const res = await Axios.post('scream/', formData);
       console.log("res data", res.data);
       thunkAPI.dispatch(ADD_SCREAM(res.data));
+      thunkAPI.dispatch(ADD_USER_SCREAM(res.data));
       return res.data;
     } catch (error) {
       console.log("error", error.response.data);
@@ -101,10 +101,6 @@ const newFeed = createSlice({
   name: "newFeed",
   initialState: initialScreams,
   reducers: {
-    FLETCH: (state, action) => {
-      console.log("action", action.payload);
-      return state = [...action.payload];
-    },
     ADD_SCREAM: (state, action) => {
       state.unshift(action.payload);
     }
@@ -126,6 +122,10 @@ const newFeed = createSlice({
       const screamId = action.payload;
       return state.filter(scream => scream.screamId !== screamId);
     },
+    [FLETCH_SCREAMS.fulfilled]: (state, action) => {
+      console.log("action", action.payload);
+      return state = [...action.payload];
+    }
   }
 })
 

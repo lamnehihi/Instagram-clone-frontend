@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, makeStyles, Box } from "@material-ui/core";
 import ScreamCard from "../ScreamCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 } from "features/NewFeed/NewFeedSlice";
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
 import ScreamPost from "../ScreamPost";
+import { POST_COMMENT } from "features/Scream/ScreamSlice";
 
 ScreamList.propTypes = {
   screams: PropTypes.array,
@@ -43,6 +44,7 @@ function ScreamList(props) {
   };
 
   const { authenticated, credentials } = useSelector((state) => state.user);
+
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -88,8 +90,17 @@ function ScreamList(props) {
     formData.set("image", image, image.name);
   };
 
+  const handleCommentSubmit = (body, screamId) => {
+    if (authenticated) {
+      console.log("comment", body);
+      dispatch(POST_COMMENT({ body, screamId }));
+    } else {
+      history.push("/login");
+    }
+  };
+
   return (
-    <Grid item className={`${classes.root}`} xs={7}>
+    <Grid item className={`${classes.root}`} xs={10} md={8}>
       <ScreamPost
         handleImageChange={handleImageChange}
         handlePost={handlePost}
@@ -99,6 +110,7 @@ function ScreamList(props) {
       {screams.map((scream, index) => {
         return (
           <ScreamCard
+            handleCommentSubmit={handleCommentSubmit}
             key={index}
             scream={scream}
             isLike={checkLike(scream)}

@@ -8,11 +8,7 @@ Edit.propTypes = {};
 
 function Edit(props) {
   const {
-    authenticated,
     credentials,
-    likes,
-    notifications,
-    screams,
   } = useSelector((state) => state.user);
   return (
     <Container maxWidth="md">

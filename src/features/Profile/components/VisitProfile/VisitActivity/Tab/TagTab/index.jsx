@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles, Box, Typography, Button } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 
 import LoyaltyOutlinedIcon from '@material-ui/icons/LoyaltyOutlined';
 import { defaultTableTabProps, tableTabStyle } from "features/Profile/Style/tableTabStyle";

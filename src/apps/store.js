@@ -1,6 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import newFeedReducer from "features/NewFeed/NewFeedSlice";
+import screamHottest from "features/NewFeed/HottestSlice";
+
 import userReducer from "features/Auth/UserSlice";
 import UiReducer from "features/Auth/UiSlice";
 import profileReducer from "features/Profile/ProfileSlice";
@@ -15,6 +17,7 @@ const rootReducer = {
   ui: UiReducer,
   profile: profileReducer,
   scream: screamReducer,
+  hottest: screamHottest,
 }
 
 const store = configureStore({

@@ -81,7 +81,7 @@ const Scream = createSlice({
     [POST_COMMENT.fulfilled] : (state, action) => {
       const newComment = {...action.payload.newComment};
       console.log("comment detail", newComment);
-      state.comments.push(newComment);
+      state.comments.unshift(newComment);
     },
   }
 })

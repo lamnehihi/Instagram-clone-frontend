@@ -11,13 +11,15 @@ import {
   Box,
   Link,
   Paper,
-  Container,
 } from "@material-ui/core";
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
 import styleLogin from "features/Auth/Style/styleLogin";
 import { SET_AUTHENTICATED_LOGIN } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
+import firebase from 'firebase';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { uiConfig } from "App";
 
 const style = styleLogin;
 
@@ -50,11 +52,13 @@ function Login(props) {
 
   const userLogin = useSelector((state) => state.user);
   console.log("login");
+
+
   return (
     <div>
     <Grid container className={classes.root}>
       <Grid item sm>
-        <Paper item sm className={classes.box} elevation={15}>
+        <Paper className={classes.box} elevation={15}>
           <img
             src={appIcon}
             alt="instagram"
@@ -98,12 +102,15 @@ function Login(props) {
               className={classes.button}
             >
               Log In
-              {error.general ? (
+              {error.general && (
                 <Typography className={classes.error}>
                   wrong emai or password
                 </Typography>
-              ) : (
-                <Typography className={classes.error}></Typography>
+              )}
+              {error.email && (
+                <Typography className={classes.error}>
+                  email already in use
+                </Typography>
               )}
               {loading && (
                 <CircularProgress size="2rem" className={classes.loading} />
@@ -120,14 +127,7 @@ function Login(props) {
             <Typography className={classes.subdDivider}>OR</Typography>
             <Divider className={classes.divider} variant="middle" />
           </Box>
-          <Link
-            href="#"
-            color="secondary"
-            display="block"
-            className={classes.bold}
-          >
-            Log in with google
-          </Link>
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
           <Link
             href="#"
             color="secondary"
@@ -137,7 +137,7 @@ function Login(props) {
             Forgot password?
           </Link>
         </Paper>
-        <Paper item sm className={classes.boxSignup} elevation={15}>
+        <Paper className={classes.boxSignup} elevation={15}>
           Don't have an account? 
           <Link href="/signup" color="secondary">
           Sign up
