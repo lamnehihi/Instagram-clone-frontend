@@ -15,6 +15,7 @@ import { LOADING_NEW_FEED } from "features/Auth/UiSlice";
 import LazyLoading from "components/LazyLoading";
 
 import firebase from "firebase";
+import { FLETCH_HOTTEST } from "features/NewFeed/HottestSlice";
 // Configure Firebase.
 const config = {
   apiKey: "AIzaSyAfygoN_d6s6nq_3ITWL8gp6D-e1K5JJuA",
@@ -77,6 +78,7 @@ function App() {
   useEffect(() => {
     dispatch(LOADING_NEW_FEED());
     dispatch(FLETCH_SCREAMS());
+    dispatch(FLETCH_HOTTEST());
   }, []);
   const history = useHistory();
 

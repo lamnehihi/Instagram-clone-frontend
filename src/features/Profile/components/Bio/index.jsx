@@ -58,7 +58,7 @@ function Bio(props) {
           className={`${classes.section} header`}
           position="relative"
         >
-          <Typography variant="h2">{user.handle}</Typography>
+          <Typography variant="h2" style={{display: "contents"}}>{user.handle}</Typography>
           <Grid xs={12} md={3} item>
             <Button variant="outlined" onClick={handleOnClick}>
               Edit Profile

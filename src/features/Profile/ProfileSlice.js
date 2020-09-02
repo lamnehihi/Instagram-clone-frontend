@@ -48,7 +48,7 @@ export const EDIT_PROFILE = createAsyncThunk(
 
       Axios.defaults.baseURL =
         "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
-      const res = await Axios.post("user/", userData);
+      const res = await Axios.post("user", userData);
       const { dispatch } = thunkAPI;
       dispatch(SET_LOGIN());
       setTimeout(() => {

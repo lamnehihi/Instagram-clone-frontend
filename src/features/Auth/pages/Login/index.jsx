@@ -102,12 +102,15 @@ function Login(props) {
               className={classes.button}
             >
               Log In
-              {error.general ? (
+              {error.general && (
                 <Typography className={classes.error}>
                   wrong emai or password
                 </Typography>
-              ) : (
-                <Typography className={classes.error}></Typography>
+              )}
+              {error.email && (
+                <Typography className={classes.error}>
+                  email already in use
+                </Typography>
               )}
               {loading && (
                 <CircularProgress size="2rem" className={classes.loading} />
@@ -124,14 +127,6 @@ function Login(props) {
             <Typography className={classes.subdDivider}>OR</Typography>
             <Divider className={classes.divider} variant="middle" />
           </Box>
-          <Link
-            href="#"
-            color="secondary"
-            display="block"
-            className={classes.bold}
-          >
-            Log in with google
-          </Link>
           <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
           <Link
             href="#"

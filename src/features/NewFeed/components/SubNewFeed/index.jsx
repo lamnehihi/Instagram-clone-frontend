@@ -99,7 +99,7 @@ const useStyle = makeStyles((theme) => ({
 
 function SubNewFeed(props) {
   const { credentials } = props;
-  const { hottest } = useRandomHottest();
+  const hottest = useSelector(state => state.hottest);
   const classes = useStyle();
   const helpText = [
     "Suggested for you",
@@ -150,7 +150,7 @@ function SubNewFeed(props) {
 
           {(loadingNewFeed
             ? Array.from(new Array(6))
-            : hottest.current.slice(0, 6)
+            : hottest.slice(0, 6)
           ).map((people, index) => {
             return (
               <Box
@@ -182,7 +182,9 @@ function SubNewFeed(props) {
                       flexDirection="column"
                       justifyContent="center"
                     >
+                    <Link to={`/profile/${people.name}`}>
                       <Typography variant="h5">{people.name}</Typography>
+                      </Link>
                       <Typography variant="h6">
                         {helpText[Math.trunc(Math.random() * 2)]}
                       </Typography>

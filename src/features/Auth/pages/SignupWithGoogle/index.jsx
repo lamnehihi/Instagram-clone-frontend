@@ -7,7 +7,6 @@ import {
   Button,
   Typography,
   CircularProgress,
-  Divider,
   Box,
   Link,
   Paper,
@@ -15,27 +14,34 @@ import {
 import appIcon from "assets/images/logo.png";
 import { useHistory } from "react-router-dom";
 import styleSignup from "features/Auth/Style/styleSignup";
-import { SET_AUTHENTICATED_SIGNUP, setAuthorizationHeader } from "features/Auth/UserSlice";
+import {
+  SET_AUTHENTICATED_SIGNUP_OAUTH,
+  setAuthorizationHeader,
+  SET_LOGIN,
+} from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import firebase from "firebase";
 import Axios from "axios";
 
-SignupWithGoogle.propTypes = {
-};
+SignupWithGoogle.propTypes = {};
 
 const style = styleSignup;
-
 
 function SignupWithGoogle(props) {
   const classes = style();
   const [user, setUser] = useState({
-    email: '',
-    handle: '',
+    email: "",
+    handle: "",
     password: "",
     confirmPassword: "",
+    userId: "",
+    imageUrl: "",
+    token: "",
+    isPure: true,
   });
-  const loading = useSelector(state => state.ui.loading);
-  const error = useSelector(state => state.ui.errors);
+
+  const loading = useSelector((state) => state.ui.loading);
+  const error = useSelector((state) => state.ui.errors);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -43,7 +49,7 @@ function SignupWithGoogle(props) {
     event.preventDefault();
     console.log("submit signup google");
 
-    const action = SET_AUTHENTICATED_SIGNUP({user, history});
+    const action = SET_AUTHENTICATED_SIGNUP_OAUTH({ user, history });
     dispatch(action);
   };
 
@@ -51,10 +57,9 @@ function SignupWithGoogle(props) {
     setUser({
       ...user,
       [event.target.name]: event.target.value,
+      isPure: false,
     });
   };
-
-  console.log("sign up with google");
 
   //hadle auth firebase state change
   useEffect(() => {
@@ -69,24 +74,38 @@ function SignupWithGoogle(props) {
         console.log("login with google", { ...userGmail });
         const gmailhandle = userGmail.displayName;
         const gmail = userGmail.email;
-        setUser({
-          ...user,
-          handle: gmailhandle,
-          email: gmail,
-        })
+        const gmailId = userGmail.uid;
+
         // Check handle of this Gmail.
         //.if it already have this handle -> set token and login.
         //.if not, -> update more data and create user for login.
         try {
+          const gmailToken = await userGmail.getIdToken();
+          console.log("token gmail", gmailToken);
+          if (gmailToken) {
+            setUser({
+              ...user,
+              token: gmailToken,
+              handle: gmailhandle,
+              email: gmail,
+              userId: gmailId,
+              imageUrl: userGmail.photoURL,
+            });
+          }
+          console.log("user", user);
+
+          setAuthorizationHeader(gmailToken);
           Axios.defaults.baseURL =
             "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
-          const res = await Axios.get(`user/${gmailhandle}`);
-          const token = await userGmail.getIdToken();
-
-          setAuthorizationHeader(token);
+          const res = await Axios.get(`auth/checkoauth`);
+          if(res.data) {
+            dispatch(SET_LOGIN());
+            history.push('/');
+          }
         } catch (error) {
           console.log("handle update more data");
-          //history.push("/");
+          localStorage.removeItem("FBIdToken");
+          delete Axios.defaults.headers.common["Authorization"];
         }
       });
     return () => unregisterAuthObserver();
@@ -113,13 +132,12 @@ function SignupWithGoogle(props) {
               Please filled out to continues
             </Typography>
             <Box
-            marginTop=".5rem"
+              marginTop=".5rem"
               display="flex"
               position="relative"
               justifyContent="space-between"
               alignItems="center"
-            >
-            </Box>
+            ></Box>
             <form noValidate onSubmit={handleSubmit} className={classes.form}>
               <TextField
                 name="email"
@@ -149,7 +167,6 @@ function SignupWithGoogle(props) {
                 helperText={error.handle}
                 error={error.handle ? true : false}
                 size="small"
-                disabled={true}
               />
               <TextField
                 name="password"
@@ -179,9 +196,9 @@ function SignupWithGoogle(props) {
                 error={error.password ? true : false}
                 size="small"
               />
-              
+
               <Button
-                disabled={loading}
+                disabled={loading || user.isPure}
                 type="submit"
                 color="primary"
                 variant="contained"

@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
-import { SET_ERRORS, LOADING_NEW_FEED_DONE } from "features/Auth/UiSlice";
+import { SET_ERRORS } from "features/Auth/UiSlice";
+import { ADD_USER_SCREAM } from "features/Auth/UserSlice";
+
 
 const initialScreams = [];
 
@@ -86,6 +88,7 @@ export const POST_SCREAM = createAsyncThunk(
       const res = await Axios.post('scream/', formData);
       console.log("res data", res.data);
       thunkAPI.dispatch(ADD_SCREAM(res.data));
+      thunkAPI.dispatch(ADD_USER_SCREAM(res.data));
       return res.data;
     } catch (error) {
       console.log("error", error.response.data);

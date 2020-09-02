@@ -58,6 +58,27 @@ export const SET_AUTHENTICATED_SIGNUP = createAsyncThunk(
   }
 );
 
+export const SET_AUTHENTICATED_SIGNUP_OAUTH = createAsyncThunk(
+  "users/authenticated_signupOAuth",
+  async (action, thunkApi) => {
+    const userData = action.user;
+    console.log("user sign up OAuth", userData);
+    const dispatch = thunkApi.dispatch;
+    dispatch(LOADING_UI());
+
+    try {
+      const res = await Axios.post("auth/signupoauth", userData);
+      setAuthorizationHeader(userData.token);
+    } catch (error) {
+      console.log("error", error.response.data);
+      dispatch(SET_ERRORS(error.response.data));
+      return
+    }
+    dispatch(SET_LOGIN());
+    action.history.push("/");
+  }
+);
+
 export const SET_LOGOUT = createAsyncThunk(
   "users/set_logout",
   async (action, thunkApi) => {
@@ -121,6 +142,9 @@ const user = createSlice({
         ...state,
         showNoti: false,
       }
+    },
+    ADD_USER_SCREAM: (state, action) => {
+      state.screams.push(action.payload);
     }
   },
   extraReducers: {
@@ -144,5 +168,6 @@ export const {
   SET_LIKE_USER,
   SET_UNLIKE_USER,
   TURN_OFF_NOTI,
+  ADD_USER_SCREAM
 } = actions;
 export default reducer;

@@ -141,7 +141,7 @@ function EditProfile(props) {
               <Avatar alt={user.handle} src={user.imageUrl} />
               <EditAvatar />
             </Grid>
-            <Grid sm={9}>
+            <Grid item sm={9}>
               <Box>
                 <Typography variant="h1">{user.handle}</Typography>
                 <Button onClick={handleChangeAvatar}>Change Avatar</Button>
@@ -152,29 +152,29 @@ function EditProfile(props) {
           <form noValidate onSubmit={handleSubmit}>
             {/* Change handle */}
             <Grid container>
-              <Grid sm={3} className={classes.aside}>
+              <Grid item sm={3} className={classes.aside}>
                 <label for="handle">Handle</label>
               </Grid>
-              <Grid sm={9}>
+              <Grid item sm={9}>
                 <TextField
                   name="handle"
                   id="handle"
                   type="text"
                   value={user.handle}
-                  onChange={handleChange}
-                  helperText="In most cases, you'll be able to change your username back to thanhlam_41 for another 14 days. Learn More
+                  helperText="In most cases, you won't be able to change your username. Learn More
 New usernames for accounts that reach a lot of people might need to be reviewed."
                   error={error.handle ? true : false}
+                  disabled={true}
                 />
               </Grid>
             </Grid>
 
             {/* Website */}
             <Grid container>
-              <Grid sm={3} className={classes.aside}>
+              <Grid item sm={3} className={classes.aside}>
                 <label for="website">Website</label>
               </Grid>
-              <Grid sm={9}>
+              <Grid item sm={9}>
                 <TextField
                   name="website"
                   id="website"
@@ -188,26 +188,27 @@ New usernames for accounts that reach a lot of people might need to be reviewed.
 
             {/* Bio */}
             <Grid container>
-              <Grid sm={3} className={classes.aside}>
+              <Grid item sm={3} className={classes.aside}>
                 <label for="bio">Bio</label>
               </Grid>
-              <Grid sm={9}>
+              <Grid item sm={9}>
                 <TextField
                   name="bio"
                   id="bio"
                   type="text"
                   value={user.bio ? user.bio : ""}
                   onChange={handleChange}
+                  multiline={true}
                 />
               </Grid>
             </Grid>
 
             {/* Location */}
             <Grid container>
-              <Grid sm={3} className={classes.aside}>
+              <Grid item sm={3} className={classes.aside}>
                 <label for="location">Location</label>
               </Grid>
-              <Grid sm={9}>
+              <Grid item sm={9}>
                 <TextField
                   name="location"
                   id="location"
@@ -220,16 +221,15 @@ New usernames for accounts that reach a lot of people might need to be reviewed.
 
             {/* Email */}
             <Grid container>
-              <Grid sm={3} className={classes.aside}>
+              <Grid item sm={3} className={classes.aside}>
                 <label for="email">Email</label>
               </Grid>
-              <Grid sm={9}>
+              <Grid item sm={9}>
                 <TextField
                   name="email"
                   id="email"
                   type="text"
                   value={user.email ? user.email : ""}
-                  onChange={handleChange}
                   disabled={true}
                 />
               </Grid>

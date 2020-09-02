@@ -17,6 +17,9 @@ import { useHistory } from "react-router-dom";
 import styleSignup from "features/Auth/Style/styleSignup";
 import { SET_AUTHENTICATED_SIGNUP } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { StyledFirebaseAuth } from "react-firebaseui";
+import { uiConfig } from "App";
+import firebase from 'firebase';
 
 const style = styleSignup;
 
@@ -64,14 +67,8 @@ function Signup(props) {
               className={classes.logo}
             />
 
-            <Link
-              href="#"
-              color="secondary"
-              display="block"
-              className={classes.bold}
-            >
-              Sign up with google
-            </Link>
+<StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+
             <Box
               display="flex"
               position="relative"
