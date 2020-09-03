@@ -1,10 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Box, Typography, makeStyles } from "@material-ui/core";
-import images from "Constants/image";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Box, Typography, makeStyles } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
+import images from 'Constants/image';
 
-NotFoundProfile.propTypes = {};
+NotFoundScream.propTypes = {
+  
+};
+
 
 const useStyle = makeStyles((theme) => ({
   typo: {
@@ -26,15 +29,16 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   img: {
-    width: "30%",
+    width: "40%",
     [theme.breakpoints.down("sm")]: {
       width: "80%",
     },
-  },
+  }
 }));
 
-function NotFoundProfile(props) {
+function NotFoundScream(props) {
   const classes = useStyle();
+
   return (
     <Box
       display="flex"
@@ -46,17 +50,17 @@ function NotFoundProfile(props) {
       <img
         style={{ marginBottom: "2rem" }}
         alt="user in duty"
-        src={images.ASTRONAUT}
+        src={images.MISSING_POST}
         className={classes.img}
       />
       <Typography className={`${classes.typo} ${classes.top}`}>
-        This user was in duty in the future
+        This request is a mystery dungeon
       </Typography>
       <NavLink to="/signup" className={`${classes.typo} ${classes.bottom}`}>
-        Wanna join our duty? Sign up here
+        Wanna discover new dungeon? Sign up here
       </NavLink>
     </Box>
   );
 }
 
-export default NotFoundProfile;
+export default NotFoundScream;

@@ -32,7 +32,7 @@ function VisitBio(props) {
 
   return (
     <Box className={classes.root} position="relative">
-      <Grid xs={4} className="avatar">
+      <Grid item xs={4} className="avatar">
         <Tooltip title="Avatar" placement="top">
           <ButtonBase disableRipple>
             {user.imageUrl ? (
@@ -48,7 +48,7 @@ function VisitBio(props) {
           </ButtonBase>
         </Tooltip>
       </Grid>
-      <Grid xs={8}>
+      <Grid item xs={8}>
         <Box
           display="flex"
           flexWrap="wrap"
@@ -59,7 +59,7 @@ function VisitBio(props) {
           <Typography variant="h2">
             {user.handle ? user.handle : <Skeleton width={260} />}
           </Typography>
-          <Grid xs={12} md={3}></Grid>
+          <Grid item xs={12} md={3}></Grid>
         </Box>
 
         <Hidden smDown>

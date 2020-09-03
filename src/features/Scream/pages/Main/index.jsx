@@ -13,6 +13,7 @@ import {
 import { SET_LIKE_USER, SET_UNLIKE_USER } from "features/Auth/UserSlice";
 import RelativeScreams from "features/Scream/components/RelativeScreams";
 import Footer from "components/Footer";
+import NotFoundScream from "features/Scream/components/NotFoundScream";
 
 Scream.propTypes = {};
 
@@ -74,7 +75,14 @@ function Scream(props) {
     window.scrollTo(0, 0)
   },[])
 
-  return (
+  const { errors } = useSelector((state) => state.ui);
+
+  return errors.error === "scream not found" ? (
+    <Container maxWidth="md">
+      <NotFoundScream />
+      <Footer />
+    </Container>
+  ) : (
     <Container maxWidth="md">
       <Grid container justify="center">
       <Box width="100%" display="flex" justifyContent="center" alignItems="center" flexDirection="column">

@@ -7,7 +7,6 @@ export const bioStyle = makeStyles((theme) => ({
     display: "flex",
     "& h2": {
       fontSize: "30px",
-      lineHeight: "32px",
       fontWeight: "300",
       maxWidth: "60%",
       overflow: "hidden",
@@ -17,12 +16,12 @@ export const bioStyle = makeStyles((theme) => ({
     },
     "& p": {
       fontSize: "1.2rem",
-      lineHeight: "1.5rem",
+      lineHeight: "1.8rem",
     },
     "& .MuiTypography-h1, a": {
       fontSize: "1.2rem",
       fontWeight: 600,
-      lineHeight: "1.5rem",
+      lineHeight: "1.8rem",
     },
     "& button": {
       backgroundColor: "#fff",
