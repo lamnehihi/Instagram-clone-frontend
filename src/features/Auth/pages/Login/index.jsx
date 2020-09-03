@@ -107,11 +107,7 @@ function Login(props) {
                   wrong emai or password
                 </Typography>
               )}
-              {error.email && (
-                <Typography className={classes.error}>
-                  email already in use
-                </Typography>
-              )}
+              
               {loading && (
                 <CircularProgress size="2rem" className={classes.loading} />
               )}

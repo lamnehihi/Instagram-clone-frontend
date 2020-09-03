@@ -10,6 +10,9 @@ export const ScreamCardStyle = makeStyles((theme) => ({
       textDecoration: "none",
       lineHeight: 1.5,
     },
+    "& span": {
+      lineHeight: 1.5,
+    },
     "& a:active": {
       color: "#26262690"
     },
@@ -80,8 +83,5 @@ export const ScreamCardStyle = makeStyles((theme) => ({
         },
       },
     },
-  },
-  textBody: {
-    width: "90%",
   },
 }));

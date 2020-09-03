@@ -87,7 +87,6 @@ const profile = createSlice({
   reducers: {
     SET_VISIT_USER: (state, action) => {
       return {
-        ...state,
         ...action.payload
       }
     }

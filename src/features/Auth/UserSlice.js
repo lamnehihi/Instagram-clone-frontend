@@ -114,6 +114,7 @@ export const MARK_NOTI_READ = createAsyncThunk(
   }
 );
 
+
 const user = createSlice({
   name: "user",
   initialState: initialState,
@@ -145,6 +146,13 @@ const user = createSlice({
     },
     ADD_USER_SCREAM: (state, action) => {
       state.screams.push(action.payload);
+    },
+    DELETE_USER_SCREAM: (state, action) => {
+      const screamId = action.payload;
+      return {
+        ...state,
+        screams: state.screams.filter((scream) => scream.id !== screamId),
+      };
     }
   },
   extraReducers: {
@@ -168,6 +176,7 @@ export const {
   SET_LIKE_USER,
   SET_UNLIKE_USER,
   TURN_OFF_NOTI,
-  ADD_USER_SCREAM
+  ADD_USER_SCREAM,
+  DELETE_USER_SCREAM
 } = actions;
 export default reducer;

@@ -19,7 +19,7 @@ import { SET_AUTHENTICATED_SIGNUP } from "features/Auth/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { StyledFirebaseAuth } from "react-firebaseui";
 import { uiConfig } from "App";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const style = styleSignup;
 
@@ -31,8 +31,8 @@ function Signup(props) {
     password: "",
     confirmPassword: "",
   });
-  const loading = useSelector(state => state.ui.loading);
-  const error = useSelector(state => state.ui.errors);
+  const loading = useSelector((state) => state.ui.loading);
+  const error = useSelector((state) => state.ui.errors);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ function Signup(props) {
     event.preventDefault();
     console.log("submit signup");
 
-    const action = SET_AUTHENTICATED_SIGNUP({user, history});
+    const action = SET_AUTHENTICATED_SIGNUP({ user, history });
     dispatch(action);
   };
 
@@ -67,7 +67,10 @@ function Signup(props) {
               className={classes.logo}
             />
 
-<StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+            <StyledFirebaseAuth
+              uiConfig={uiConfig}
+              firebaseAuth={firebase.auth()}
+            />
 
             <Box
               display="flex"
@@ -150,6 +153,11 @@ function Signup(props) {
                   </Typography>
                 ) : (
                   <Typography className={classes.error}></Typography>
+                )}
+                {error.email && (
+                  <Typography className={classes.error}>
+                    email already in use
+                  </Typography>
                 )}
                 {loading && (
                   <CircularProgress size="2rem" className={classes.loading} />

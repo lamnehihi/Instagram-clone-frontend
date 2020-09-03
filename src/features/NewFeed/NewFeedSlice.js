@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { SET_ERRORS } from "features/Auth/UiSlice";
-import { ADD_USER_SCREAM } from "features/Auth/UserSlice";
+import { ADD_USER_SCREAM, DELETE_USER_SCREAM } from "features/Auth/UserSlice";
 
 
 const initialScreams = [];
@@ -67,6 +67,7 @@ export const DELETE_SCREAMS = createAsyncThunk(
       "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
       const screamId = action;
       const res = await Axios.delete(`scream/${screamId}`);
+      thunkAPI.dispatch(DELETE_USER_SCREAM(screamId));
       return screamId;
     } catch (error) {
       console.log("error", error.response.data);

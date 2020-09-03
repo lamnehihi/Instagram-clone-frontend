@@ -87,4 +87,20 @@ export const hottestPeople = [
     avatar: 'https://i.ibb.co/fHcHWrW/The-Karate-Girl.jpg',
     name: 'The Karate Girl',
   },
+  {
+    avatar: 'https://i.ibb.co/SrxbKLM/Johnny-Sin.jpg',
+    name: 'Johnny Sin',
+  },{
+    avatar: 'https://i.ibb.co/5YJ56dk/My-Squad.png',
+    name: 'My Squad',
+  },{
+    avatar: 'https://i.ibb.co/G3WXLcY/Marry-Chrismart.jpg',
+    name: 'Marry Christmas',
+  },{
+    avatar: 'https://i.ibb.co/BfPLMNv/Cop-of-the-year.jpg',
+    name: 'Cop Of The Year',
+  },{
+    avatar: 'https://i.ibb.co/C5zKgSr/Alibaba.jpg',
+    name: 'Alibaba',
+  },
 ]
