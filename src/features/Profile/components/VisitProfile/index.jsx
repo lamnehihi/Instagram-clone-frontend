@@ -1,12 +1,12 @@
-import React from 'react';
-import { Container } from '@material-ui/core';
-import VisitBio from './VisitBio';
-import VisitActivity from './VisitActivity';
+import React from "react";
+import { Container } from "@material-ui/core";
+import VisitBio from "./VisitBio";
+import VisitActivity from "./VisitActivity";
 
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import NotFoundProfile from "./NotFoundProfile";
 
-VisitProfile.propTypes = {
-};
+VisitProfile.propTypes = {};
 
 function VisitProfile(props) {
   const {
@@ -31,9 +31,14 @@ function VisitProfile(props) {
     createdAt,
     screams,
   };
-  return (
+  const { errors } = useSelector((state) => state.ui);
+  return errors.error === "user not found" ? (
     <Container maxWidth="md">
-      <VisitBio user={credentials} screams={screams}/>
+      <NotFoundProfile />
+    </Container>
+  ) : (
+    <Container maxWidth="md">
+      <VisitBio user={credentials} screams={screams} />
       <VisitActivity screams={screams} />
     </Container>
   );

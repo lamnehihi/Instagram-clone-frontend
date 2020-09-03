@@ -70,6 +70,10 @@ function Scream(props) {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  },[])
+
   return (
     <Container maxWidth="md">
       <Grid container justify="center">

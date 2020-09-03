@@ -6,18 +6,23 @@ export const bioStyle = makeStyles((theme) => ({
     paddingTop: "2rem",
     display: "flex",
     "& h2": {
-      fontSize: "32px",
+      fontSize: "30px",
       lineHeight: "32px",
       fontWeight: "300",
-      marginRight: "1rem",
+      maxWidth: "60%",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      lineHeight: "3rem"
     },
-    "& p, a": {
+    "& p": {
       fontSize: "1.2rem",
-      lineHeight: "2.5rem",
+      lineHeight: "1.5rem",
     },
     "& .MuiTypography-h1, a": {
       fontSize: "1.2rem",
       fontWeight: 600,
+      lineHeight: "1.5rem",
     },
     "& button": {
       backgroundColor: "#fff",
@@ -45,6 +50,7 @@ export const bioStyle = makeStyles((theme) => ({
         marginRight: "1rem",
       },
       "& h2": {
+        width: "100%",
         position: 'absolute',
         left: "1%",
         top: '5%'
@@ -85,10 +91,17 @@ export const bioStyle = makeStyles((theme) => ({
     fontSize: "1.2rem",
     fontWeight: "500",
     marginRight: ".5rem",
+    lineHeight: "3rem"
     }
   },
 
   section: {
     marginBottom: "1rem",
   },
+  editButton: {
+    marginLeft: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "0rem",
+    },
+  }
 }));

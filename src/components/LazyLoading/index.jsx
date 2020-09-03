@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box } from "@material-ui/core";
+import images from "Constants/image";
 
 LazyLoading.propTypes = {};
 
@@ -14,9 +15,8 @@ function LazyLoading(props) {
       alignItems="center"
     >
       <img
-        width="206px"
-        height="58px"
-        src="https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png"
+        width="10%"
+        src={images.LAZY_SVG}
         alt="logo"
       ></img>
     </Box>

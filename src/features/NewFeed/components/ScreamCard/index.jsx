@@ -182,11 +182,11 @@ function ScreamCard(props) {
             <Typography className={`${classes.bold} ${classes.text}`}>
               {`${likeCount} likes`}
             </Typography>
-            <Box display="flex">
-              <Typography className={`${classes.bold} ${classes.text}`}>
+            <Box display="flex" flexWrap="wrap">
+              <NavLink to={`/profile/${scream.userHandle}`} className={`${classes.bold} ${classes.text}`}>
                 {userHandle}
-              </Typography>
-              <Typography className={`${classes.text} ${classes.textBody}`}>
+              </NavLink>
+              <Typography variant='span' className={`${classes.text}`}>
                 {add3Dots(body, 80)}
               </Typography>
             </Box>

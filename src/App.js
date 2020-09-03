@@ -16,6 +16,7 @@ import LazyLoading from "components/LazyLoading";
 
 import firebase from "firebase";
 import { FLETCH_HOTTEST } from "features/NewFeed/HottestSlice";
+import NotFoundPage from "components/NotFoundPage";
 // Configure Firebase.
 const config = {
   apiKey: "AIzaSyAfygoN_d6s6nq_3ITWL8gp6D-e1K5JJuA",
@@ -125,6 +126,7 @@ function App() {
                 <Route exact path="/signup" component={Auth}></Route>
                 <Route exact path="/login" component={Auth}></Route>
                 <Route exact path="/signupwithgoogle" component={Auth}></Route>
+                <Route component={NotFoundPage}></Route>
               </Switch>
             </div>
           </BrowserRouter>
