@@ -7,7 +7,7 @@ import JwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
 import {
   SET_LOGOUT,
-  SET_LOGIN,
+  SET_LOGIN
 } from "features/Auth/UserSlice";
 import Axios from "axios";
 import { FLETCH_SCREAMS } from "features/NewFeed/NewFeedSlice";
@@ -17,6 +17,10 @@ import LazyLoading from "components/LazyLoading";
 import firebase from "firebase";
 import { FLETCH_HOTTEST } from "features/NewFeed/HottestSlice";
 import NotFoundPage from "components/NotFoundPage";
+
+Axios.defaults.baseURL =
+        "https://asia-east2-socialape-fb7db.cloudfunctions.net/api";
+
 // Configure Firebase.
 const config = {
   apiKey: "AIzaSyAfygoN_d6s6nq_3ITWL8gp6D-e1K5JJuA",
