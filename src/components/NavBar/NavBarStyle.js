@@ -94,4 +94,8 @@ export const NavBarStyle = makeStyles((theme) => ({
       margin: "0rem .7rem",
     },
   },
+  img: {
+    width: '103px',
+    height: '29px',
+  }
 }));
